@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net10.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <PackageId>SmarterMail.Net</PackageId>
+    <Version>1.1.5</Version>
+    <PackageReleaseNotes>feat(sdk): add address-book management, contact import/export, spam settings, and source endpoints</PackageReleaseNotes>
+    <Authors>Rui Pereira</Authors>
+    <Description>A cross-platform .NET SDK that provides a strongly typed wrapper around the SmarterMail HTTP API.</Description>
+    <PackageTags>smartermail;email;api;sdk</PackageTags>
+    <PackageReadmeFile></PackageReadmeFile>
+    <RepositoryUrl>https://github.com/RuiAAPereira/smartermail-net</RepositoryUrl>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>CS1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.7" />
+    <PackageReference Include="System.Text.Json" Version="10.0.7" />
+  </ItemGroup>
+</Project>

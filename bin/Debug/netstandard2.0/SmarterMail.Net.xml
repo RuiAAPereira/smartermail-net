@@ -1,0 +1,1455 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SmarterMail.Net</name>
+    </assembly>
+    <members>
+        <member name="T:SmarterMail.Net.Authentication.ISmarterMailAuthenticator">
+            <summary>Manages authentication tokens for the SmarterMail API.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Authentication.ISmarterMailAuthenticator.GetAccessTokenAsync(System.Threading.CancellationToken)">
+            <summary>
+            Returns a valid access token, performing login or proactive refresh as needed.
+            Thread-safe.
+            </summary>
+        </member>
+        <member name="M:SmarterMail.Net.Authentication.ISmarterMailAuthenticator.ForceRefreshAsync(System.Threading.CancellationToken)">
+            <summary>
+            Forces an immediate token refresh. Tries the refresh-token endpoint first;
+            falls back to full re-authentication if the refresh token is expired or invalid.
+            Called by the HTTP client on receiving a 401 response.
+            </summary>
+        </member>
+        <member name="T:SmarterMail.Net.Authentication.SmarterMailAuthenticator">
+            <summary>
+            Authenticates against the SmarterMail API, caches tokens,
+            and refreshes them proactively or on demand.
+            </summary>
+        </member>
+        <member name="M:SmarterMail.Net.Authentication.SmarterMailAuthenticator.#ctor(System.Net.Http.HttpClient,System.String,System.String,Microsoft.Extensions.Logging.ILogger{SmarterMail.Net.Authentication.SmarterMailAuthenticator})">
+            <summary>
+            Initializes a new instance of <see cref="T:SmarterMail.Net.Authentication.SmarterMailAuthenticator"/>.
+            </summary>
+        </member>
+        <member name="M:SmarterMail.Net.Authentication.SmarterMailAuthenticator.GetAccessTokenAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Authentication.SmarterMailAuthenticator.ForceRefreshAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Authentication.SmarterMailAuthenticator.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="T:SmarterMail.Net.Client.ISmarterMailClientFactory">
+            <summary>
+            Creates per-user <see cref="T:SmarterMail.Net.Client.SmarterMailClient"/> instances backed by a shared HTTP connection pool.
+            </summary>
+        </member>
+        <member name="M:SmarterMail.Net.Client.ISmarterMailClientFactory.Create(System.String,System.String)">
+            <summary>
+            Creates a <see cref="T:SmarterMail.Net.Client.SmarterMailClient"/> authenticated as the given user.
+            The caller is responsible for disposing the returned instance.
+            </summary>
+        </member>
+        <member name="T:SmarterMail.Net.Client.SmarterMailClient">
+            <summary>
+            Entry point for the SmarterMail SDK. Provides access to all API modules.
+            </summary>
+        </member>
+        <member name="P:SmarterMail.Net.Client.SmarterMailClient.Mail">
+            <summary>Operations for the authenticated user's email mailbox.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Client.SmarterMailClient.Calendar">
+            <summary>Operations for the authenticated user's calendar.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Client.SmarterMailClient.Contacts">
+            <summary>Operations for the authenticated user's contacts.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Client.SmarterMailClient.Notes">
+            <summary>Operations for the authenticated user's notes.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Client.SmarterMailClient.Tasks">
+            <summary>Operations for the authenticated user's tasks.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Client.SmarterMailClient.Notifications">
+            <summary>Operations for the authenticated user's notifications and alerts.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Client.SmarterMailClient.Categories">
+            <summary>Operations for the authenticated user's mail and item categories.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Client.SmarterMailClient.UserSettings">
+            <summary>Operations for the authenticated user's account settings, signatures, and auto-reply.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Client.SmarterMailClient.Folders">
+            <summary>Operations for the authenticated user's email folders and virtual folders.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Client.SmarterMailClient.FileStorage">
+            <summary>Operations for the authenticated user's file storage.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Client.SmarterMailClient.#ctor(SmarterMail.Net.Authentication.SmarterMailAuthenticator,SmarterMail.Net.Modules.Mail.IMailModule,SmarterMail.Net.Modules.Calendar.ICalendarModule,SmarterMail.Net.Modules.Contacts.IContactsModule,SmarterMail.Net.Modules.Notes.INotesModule,SmarterMail.Net.Modules.Tasks.ITasksModule,SmarterMail.Net.Modules.Notifications.INotificationsModule,SmarterMail.Net.Modules.Categories.ICategoriesModule,SmarterMail.Net.Modules.UserSettings.IUserSettingsModule,SmarterMail.Net.Modules.Folders.IFoldersModule,SmarterMail.Net.Modules.FileStorage.IFileStorageModule)">
+            <summary>Initializes a new instance of <see cref="T:SmarterMail.Net.Client.SmarterMailClient"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Client.SmarterMailClient.DisposeAsync">
+            <inheritdoc/>
+        </member>
+        <member name="T:SmarterMail.Net.Configuration.SmarterMailClientOptions">
+            <summary>
+            Configuration options for the SmarterMail client.
+            </summary>
+        </member>
+        <member name="P:SmarterMail.Net.Configuration.SmarterMailClientOptions.BaseUrl">
+            <summary>The base URL of the SmarterMail server (e.g., https://mail.example.com).</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Exceptions.SmarterMailApiException">
+            <summary>Thrown when the SmarterMail API returns a non-success, non-401 response.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Exceptions.SmarterMailApiException.StatusCode">
+            <summary>The HTTP status code returned by the API.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Exceptions.SmarterMailAuthenticationException">
+            <summary>Thrown when authentication or token refresh fails.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Exceptions.SmarterMailException">
+            <summary>Base exception for all SmarterMail SDK errors.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Extensions.ServiceCollectionExtensions">
+            <summary>Extension methods for registering the SmarterMail SDK with DI.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Extensions.ServiceCollectionExtensions.AddDotNetSmarterMailClient(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{SmarterMail.Net.Configuration.SmarterMailClientOptions})">
+            <summary>
+            Registers the SmarterMail SDK services. Validates options at registration time.
+            </summary>
+        </member>
+        <member name="T:SmarterMail.Net.Http.ISmarterMailHttpClient">
+            <summary>
+            Abstraction for all authenticated HTTP communication with the SmarterMail API.
+            </summary>
+        </member>
+        <member name="M:SmarterMail.Net.Http.ISmarterMailHttpClient.GetAsync``1(System.String,System.Threading.CancellationToken)">
+            <summary>Sends a GET request and deserializes the response as <typeparamref name="T"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Http.ISmarterMailHttpClient.PostAsync``1(System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>Sends a POST request with an optional body and deserializes the response as <typeparamref name="T"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Http.ISmarterMailHttpClient.PutAsync``1(System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>Sends a PUT request with an optional body and deserializes the response as <typeparamref name="T"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Http.ISmarterMailHttpClient.DeleteAsync``1(System.String,System.Threading.CancellationToken)">
+            <summary>Sends a DELETE request and deserializes the response as <typeparamref name="T"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Http.ISmarterMailHttpClient.PatchAsync``1(System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>Sends a PATCH request with an optional body and deserializes the response as <typeparamref name="T"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Http.ISmarterMailHttpClient.PostAsync(System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>Sends a POST request with an optional body and discards the response body.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Http.ISmarterMailHttpClient.PostStringAsync(System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>Sends a POST request with an optional body and returns the raw response body as a string.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Http.ISmarterMailHttpClient.PostBytesAsync(System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>Sends a POST request with an optional body and returns the raw response body as a byte array.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Http.ISmarterMailHttpClient.DeleteAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Sends a DELETE request and discards the response body.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Http.ISmarterMailHttpClient.GetStreamAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Sends a GET request and returns the raw response stream. Caller owns the stream lifetime.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Http.ISmarterMailHttpClient.GetBytesAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Sends a GET request and returns the raw response body as a byte array. Accepts absolute URLs (e.g. pre-signed attachment links).</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Http.ISmarterMailHttpClient.PostMultipartAsync``1(System.String,System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <summary>Sends a POST request with a multipart/form-data body containing a single file and deserializes the response as <typeparamref name="T"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Http.ISmarterMailHttpClient.PostMultipartAsync``1(System.String,System.IO.Stream,System.String,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>Posts multipart form data: one file part plus arbitrary string fields.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Http.ISmarterMailHttpClient.PostResumableAttachmentAsync``1(System.String,System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Uploads a file to /api/upload using SmarterMail's resumable-upload protocol so the server
+            registers it under the given attachment GUID. Only single-chunk uploads are supported.
+            </summary>
+        </member>
+        <member name="M:SmarterMail.Net.Http.ISmarterMailHttpClient.PostResumableUploadAsync``1(System.String,System.String,System.IO.Stream,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Uploads a file to /api/upload using SmarterMail's resumable-upload protocol with an
+            arbitrary <paramref name="context"/> and <paramref name="contextData"/> (JSON string).
+            Only single-chunk uploads are supported.
+            When <paramref name="contentType"/> is null or empty the MIME type is derived from the file extension of <paramref name="fileName"/>.
+            </summary>
+        </member>
+        <member name="T:SmarterMail.Net.Http.SmarterMailHttpClient">
+            <summary>
+            Sends authenticated HTTP requests to the SmarterMail API.
+            Injects Bearer tokens, serializes/deserializes JSON, handles errors and 401 retry.
+            </summary>
+        </member>
+        <member name="T:SmarterMail.Net.Http.SmarterMailJsonOptions">
+            <summary>Centralized JSON serializer configuration for the SmarterMail SDK.</summary>
+        </member>
+        <member name="F:SmarterMail.Net.Http.SmarterMailJsonOptions.Default">
+            <summary>
+            Shared options: camelCase, case-insensitive matching, nulls omitted,
+            string enum conversion.
+            </summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Enums.AvailabilityLevel">
+            <summary>An hour's free/busy level returned by the user-availability endpoint.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Requests.AddressBookRequest">
+            <summary>Request body for address-book folder add/edit/delete endpoints.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.AddressBookRequest.OwnerEmailAddress">
+            <summary>Optional owner; defaults to the authenticated user when null.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.AddressBookRequest.Folder">
+            <summary>Folder (book) display name. Required for add and edit; ignored by delete.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.AddressBookRequest.Uid">
+            <summary>Address-book GUID. Required for edit and delete; omit for add.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.DeleteContactsRequest.Contacts">
+            <summary>Contacts to delete. Each item identifies a single contact to remove.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Requests.DeleteEventBodyRequest">
+            <summary>Optional body for the single-event delete endpoint. When <see cref="P:SmarterMail.Net.Models.Requests.DeleteEventBodyRequest.InstanceStart"/>
+            is set, only that occurrence of a recurring series is deleted; otherwise the whole series.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.DeleteMessagesRequest.MoveToDeleted">
+            <summary>
+            When true (default), deleted messages are moved to the Deleted Items folder.
+            Set to false to permanently delete (skip Trash).
+            </summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Requests.DeleteTaskRequest">
+            <summary>Identity of a task to delete (posted as an array element to <c>/api/v1/tasks/delete/</c>).</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.DeleteTaskRequest.SourceOwner">
+            <summary>Owner (numeric local account name, e.g. "4065").</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.DeleteTaskRequest.SourceId">
+            <summary>Source (task list) id.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.DeleteTaskRequest.Id">
+            <summary>Task id.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Requests.GetOccurrenceDetailsRequest">
+            <summary>Body for the occurrence-details endpoint: identifies one occurrence of a recurring series.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Requests.GetUserAvailabilityRequest">
+            <summary>Query for free/busy availability of one or more users on a given day.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.MessageFlagAction.Type">
+            <summary>
+            The flag action type. Known values: "SetBasic", "SetFollowup", "Complete", "Clear".
+            </summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.SaveEventRequest.AttachmentGuid">
+            <summary>When set, binds files previously uploaded under this attachment GUID to the saved event.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Requests.SearchAutoCompleteListPostRequest">
+            <summary>Search criteria for the auto-complete address list (GAL, contacts, and history).</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.SearchAutoCompleteListPostRequest.Search">
+            <summary>The text to match against display names and email addresses.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.SearchAutoCompleteListPostRequest.RequestLimit">
+            <summary>Maximum number of entries to return.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.SearchAutoCompleteListPostRequest.UnpackGroups">
+            <summary>When true, expands mailing-list groups into their member addresses.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Requests.SetSpamSettingsRequest">
+            <summary>Request body for POST /api/v1/settings/spam-settings.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.SetSpamSettingsRequest.UserSettings">
+            <summary>Updated user spam filter settings.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.UndoMessageRequest.Uids">
+            <summary>The unique identifiers of the messages to undo.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.UndoMessageRequest.IsScheduled">
+            <summary>If true, the message is a scheduled send; if false, it is a delayed send.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.UndoMessageRequest.KeepInFolder">
+            <summary>If true, keep the message in its current folder instead of moving it back to Drafts.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.AddAttachmentResponse.Key">
+            <summary>Populated by /api/upload on success (e.g. "att_guid_0.png").</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.AddAttachmentResponse.FileName">
+            <summary>Original filename returned by /api/upload.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.AddAttachmentResponse.IsUploaded">
+            <summary>True if the upload succeeded by either protocol (success flag or key present).</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.AddAddressBookResponse">
+            <summary>Response from the address-book create endpoint.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.AddAddressBookResponse.FolderId">
+            <summary>Numeric folder id of the created book.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.AddAddressBookResponse.FolderGuid">
+            <summary>GUID of the created book.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.AddAddressBookResponse.Success">
+            <summary>Whether the call succeeded.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.AddAddressBookResponse.DebugInfo">
+            <summary>Server diagnostic message on failure.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.AddressBookResponse">
+            <summary>Response from the address-book edit/delete endpoints.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.AddressBookResponse.Success">
+            <summary>Whether the call succeeded.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.AddressBookResponse.DebugInfo">
+            <summary>Server diagnostic message on failure.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.DraftPutResponse">
+            <summary>
+            Response from POST /api/v1/mail/draft-put/{attachGuid}.
+            Returns the uid of the saved draft and whether the operation succeeded.
+            </summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.DraftPutResponse.AttachmentInfo">
+            <summary>Populated when the server found and bound attachments to this draft.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.GenerateAttachmentLinksResponse.Links">
+            <summary>Dictionary mapping part IDs to time-limited attachment download links.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.GenerateMessageInlineLinksResponse.InlineLinks">
+            <summary>Dictionary mapping part IDs to time-limited inline image links.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.GetAddressBookResponse">
+            <summary>Response for the user's contact folder listing.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.GetAddressBookResponse.Folders">
+            <summary>The address-book folders available to the user (personal + shared).</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.GetAddressBookResponse.Contacts">
+            <summary>The contacts and groups returned by the address-book endpoint.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.GetAllEventsResponse">
+            <summary>Response for <c>GET /api/v1/calendars/events-all/{owner}/{id}</c>.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.GetCalendarSourcesResponse">
+            <summary>Response for <c>GET /api/v1/calendars/sources</c>.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.GetEmailsSignaturesResponse">
+            <summary>Response for <c>GET /api/v1/settings/emails-signatures</c>.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.GetEmailsSignaturesResponse.UserSignatures">
+            <summary>The current user's own signatures.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.GetEmailsSignaturesResponse.DomainSignatures">
+            <summary>Signatures defined at the domain level.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.GetEmailsSignaturesResponse.Success">
+            <summary>True if the function call succeeded.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.GetEmailsSignaturesResponse.Message">
+            <summary>If success is false, why the call failed.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.GetEventsBetweenDatesResponse">
+            <summary>Response for <c>POST /api/v1/calendars/events/{owner}/{id}</c> (events between dates).</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.GetNoteSourcesResponse">
+            <summary>Response for <c>GET /api/v1/notes/sources</c>.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.GetNoteSourcesResponse.Sources">
+            <summary>The user's note sources (note folders). Reuses the shared source descriptor shape.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.SpamAction">
+            <summary>A spam action rule applied at a given weight threshold.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.SpamAction.ActionType">
+            <summary>Action type code (e.g. 0 = none, 4 = move to folder).</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.SpamAction.Argument">
+            <summary>Argument for the action (e.g. folder name).</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.SpamAction.IsDefaultAction">
+            <summary>Whether this is the server default action.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.SpamAction.BoolOption1">
+            <summary>First boolean option (meaning is action-type-specific).</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.SpamAction.BoolOption2">
+            <summary>Second boolean option (meaning is action-type-specific).</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.SpamAction.ExecutionOrder">
+            <summary>Execution order for chained actions (-1 = not set).</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.UserSpamSettings">
+            <summary>User-level spam filter settings.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.UserSpamSettings.OverrideActive">
+            <summary>Whether the user overrides domain spam settings.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.UserSpamSettings.LowWeight">
+            <summary>Score threshold for low-confidence spam.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.UserSpamSettings.LowAction">
+            <summary>Action taken for low-confidence spam.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.UserSpamSettings.MedWeight">
+            <summary>Score threshold for medium-confidence spam.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.UserSpamSettings.MedAction">
+            <summary>Action taken for medium-confidence spam.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.UserSpamSettings.HighWeight">
+            <summary>Score threshold for high-confidence spam.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.UserSpamSettings.HighAction">
+            <summary>Action taken for high-confidence spam.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.GetSpamSettingsResponse">
+            <summary>Response from GET /api/v1/settings/spam-settings.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.GetSpamSettingsResponse.UserSettings">
+            <summary>User-level spam filter settings.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.GetSpamSettingsResponse.Success">
+            <summary>Whether the request succeeded.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.GetSpamSettingsResponse.Message">
+            <summary>Optional server message.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.GetTaskSourcesResponse">
+            <summary>Response for <c>GET /api/v1/tasks/sources</c>.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.GetTaskSourcesResponse.Sources">
+            <summary>The user's task sources (task lists). Reuses the shared source descriptor shape.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.GetUserAvailabilityResponse">
+            <summary>SDK-side wrapper over the bare array the user-availability endpoint returns.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.ParseContactsImportResponse">
+            <summary>
+            Response returned by POST /api/upload with context=contact-import.
+            The server parses a CSV or VCF file and returns the contacts it found, without committing them.
+            </summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.ParseContactsImportResponse.Contacts">
+            <summary>Parsed contacts from the uploaded file.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.ParseContactsImportResponse.Success">
+            <summary>Indicates whether the parse operation succeeded.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.ParseContactsImportResponse.DebugInfo">
+            <summary>Optional diagnostic message returned by the server for troubleshooting parse failures.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.ParseContactsImportResponse.ExtensionData">
+            <summary>Catch-all for any top-level fields not yet modeled.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.ParsedImportContact">
+            <summary>A single contact parsed from an import file.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.ParsedImportContact.DisplayAs">
+            <summary>Display name of the contact as parsed from the import file.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.ParsedImportContact.EmailAddressList">
+            <summary>All email addresses associated with the contact (may contain multiple entries).</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.ParsedImportContact.Email">
+            <summary>Primary email address of the contact.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.ParsedImportContact.ContactType">
+            <summary>Contact type discriminator (e.g. 0 = person, 1 = group) as returned by the server.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.ParsedImportContact.CsvFields">
+            <summary>CSV field mappings — populated for CSV imports only.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.ParsedImportContact.ExtensionData">
+            <summary>Catch-all for any contact-level fields not yet modeled.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.CsvImportField">
+            <summary>A single CSV column mapping entry returned by the server for CSV imports.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.CsvImportField.Id">
+            <summary>Server-assigned identifier for this CSV field mapping row.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.CsvImportField.MappedField">
+            <summary>SmarterMail contact field name that this CSV column was mapped to (e.g. "displayas", "emailaddress").</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.CsvImportField.UploadedField">
+            <summary>Original CSV column header as it appeared in the uploaded file.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.CsvImportField.Value">
+            <summary>Parsed cell value from the CSV row for this field.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.SetSpamSettingsResponse">
+            <summary>Response from POST /api/v1/settings/spam-settings.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.SetSpamSettingsResponse.Success">
+            <summary>Whether the update succeeded.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.SetSpamSettingsResponse.Message">
+            <summary>Optional server message.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.UnpackGroupResponse">
+            <summary>
+            Expanded recipient emails of a contact group. The unpack-group endpoint returns a
+            mixed array (bare email strings and/or contact objects) under one of several keys;
+            the SDK normalizes that into a flat email list at the JSON boundary.
+            </summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.UserCategoryItem">
+            <summary>One category entry as returned by <c>GET /api/v1/user-categories</c>.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.UserCategoryItem.Name">
+            <summary>Display name of the category.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Responses.UserCategoryItem.Master">
+            <summary>Whether this is a master (shared / system-level) category.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Shared.AttachmentLinkInfo">
+            <summary>Represents a time-limited link for a single downloadable attachment.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.AttachmentLinkInfo.Link">
+            <summary>The temporary URL to download the attachment.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.AttachmentLinkInfo.PreviewImage">
+            <summary>A preview link to the attachment.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.AttachmentLinkInfo.ExpiresAtUnixTimestamp">
+            <summary>Unix timestamp (seconds) when the link expires.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Shared.CalendarEventInfo">
+            <summary>One event row returned by the calendar event-list endpoints (the <c>events</c> array).</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Shared.CalendarSourceInfo">
+            <summary>One calendar/task/resource source returned by <c>GET /api/v1/calendars/sources</c>.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Shared.CategoryItem">
+            <summary>A single category entry within the categorySettings.categories array.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Shared.AutoCompleteEntry">
+            <summary>An entry from the auto-complete-list-search response (GAL/contacts/history).</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Shared.ContactMemberInfo">
+            <summary>A contact entry as returned by the group-members endpoint and inside a group's grouped-contacts array.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Shared.AddressBookFolderInfo">
+            <summary>An address-book folder as returned by the address-book endpoint.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Shared.CategoryInfo">
+            <summary>A category assignment on a contact.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Shared.EventAttachedFile">
+            <summary>A file attached to a calendar event (request side; response-only fields omitted).</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Shared.EventAttendee">
+            <summary>An attendee or resource invited to a calendar event.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.EventAttendee.Status">
+            <summary>Attendance status int (accepted/declined/tentative/needs-action). Values are not
+            documented by the API; see MyMail.Features.Calendar.Internal.AttendeeWire for the mapping.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.EventAttendee.Nonavail">
+            <summary>Per-hour non-availability flags for the event day.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Shared.EventCategory">
+            <summary>A category assigned to a calendar event.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Shared.EventDateTime">
+            <summary>The SmarterMail timezone-aware date/time shape used by calendar events
+            (both read-side <c>startWithTZ</c>/<c>endWithTZ</c> and write-side <c>start</c>/<c>end</c>).</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Shared.InlineLinkInfo">
+            <summary>Represents a time-limited link for a single inline (embedded) attachment.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.InlineLinkInfo.Link">
+            <summary>The temporary URL to access the inline attachment.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.InlineLinkInfo.ExpiresAtUnixTimestamp">
+            <summary>Unix timestamp (seconds) when the link expires.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Shared.MailFolderNode">
+            <summary>Represents a normalized email folder node with nested children.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.MessageDataInfo.Type">
+            <summary>
+            For email attachments: the MIME type as a string (e.g. "image/jpeg").
+            For calendar/recurrence messages: the recurrence type as a number
+            (0=None, 1=Yearly, 2=Monthly, 3=Weekly, 4=Daily, 5=Hourly, 6=Minutely, 7=Secondly).
+            Use <see cref="P:System.Text.Json.JsonElement.ValueKind"/> to distinguish.
+            </summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.MessageDataInfo.Calendar">
+            <summary>Calendar-specific fields, populated only when <see cref="P:SmarterMail.Net.Models.Shared.MessageDataInfo.IsCalendarMessage"/> is true.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.MessageDataInfo.Task">
+            <summary>Task-specific fields. Populated when the message represents a task.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.MessageDataInfo.Recurrence">
+            <summary>Recurrence rule fields for calendar/task messages.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Shared.UserAvailability">
+            <summary>Per-user free/busy levels, one entry per hour of the requested day.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.SignatureConfig">
+            <summary>A single email signature (user or domain).</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.SignatureConfig.Id">
+            <summary>Numeric identifier of the signature.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.SignatureConfig.Guid">
+            <summary>GUID identifier of the signature.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.SignatureConfig.Name">
+            <summary>Display name of the signature.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.SignatureConfig.Text">
+            <summary>HTML content of the signature.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.SignatureConfig.IsDefault">
+            <summary>True if this is the default signature for new messages.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Calendar.CalendarModule">
+            <summary>Implements calendar operations via the SmarterMail HTTP API.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.#ctor(SmarterMail.Net.Http.ISmarterMailHttpClient)">
+            <summary>Initializes a new instance of <see cref="T:SmarterMail.Net.Modules.Calendar.CalendarModule"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.GetEventsAsync(SmarterMail.Net.Models.Requests.GetAllEventsFromSearchRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.GetEventAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.SaveEventAsync(System.String,System.String,System.String,System.Boolean,SmarterMail.Net.Models.Requests.SaveEventRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.DeleteEventAsync(System.String,System.String,System.String,System.Boolean,SmarterMail.Net.Models.Requests.DeleteEventBodyRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.DeleteMeetingInviteAsync(System.String,System.String,System.String,SmarterMail.Net.Models.Requests.DeleteEventBodyRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.GetOccurrenceDetailsAsync(System.String,System.String,System.String,SmarterMail.Net.Models.Requests.GetOccurrenceDetailsRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.AcceptInvitationAsync(System.String,System.String,System.String,System.String,SmarterMail.Net.Models.Requests.AcceptMeetingInviteRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.DeclineInvitationAsync(System.String,System.String,System.String,System.String,SmarterMail.Net.Models.Requests.DeclineMeetingInviteRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.TentativeInvitationAsync(System.String,System.String,System.String,System.String,SmarterMail.Net.Models.Requests.TentativeAcceptMeetingInviteRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.GetCalendarSourcesAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.AddUserCalendarAsync(SmarterMail.Net.Models.Requests.AddUserCalendarRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.EditUserCalendarAsync(SmarterMail.Net.Models.Requests.EditUserCalendarRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.DeleteCalendarAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.RenameUserCalendarAsync(SmarterMail.Net.Models.Requests.RenameUserCalendarRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.GetInternetCalendarsAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.AddOrEditInternetCalendarAsync(SmarterMail.Net.Models.Requests.AddOrEditInternetCalendarRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.DeleteInternetCalendarAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.TestInternetCalendarAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.ImportIcsFileAsync(System.String,System.String,System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.ExportEventsAsync(System.Collections.Generic.IReadOnlyList{System.String},System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.GetEventsBetweenDatesAsync(System.String,System.String,SmarterMail.Net.Models.Requests.GetEventsBetweenDatesRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.GetUserAvailabilityAsync(SmarterMail.Net.Models.Requests.GetUserAvailabilityRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.AddAttachmentAsync(System.String,System.String,System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.CalendarModule.DownloadAttachmentAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Calendar.ICalendarModule">
+            <summary>Operations for the authenticated user's calendar.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.GetEventsAsync(SmarterMail.Net.Models.Requests.GetAllEventsFromSearchRequest,System.Threading.CancellationToken)">
+            <summary>Searches for calendar events matching the specified criteria.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.GetEventAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>Retrieves full details for a specific calendar event.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.SaveEventAsync(System.String,System.String,System.String,System.Boolean,SmarterMail.Net.Models.Requests.SaveEventRequest,System.Threading.CancellationToken)">
+            <summary>Creates or updates a calendar event.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.DeleteEventAsync(System.String,System.String,System.String,System.Boolean,SmarterMail.Net.Models.Requests.DeleteEventBodyRequest,System.Threading.CancellationToken)">
+            <summary>Deletes a calendar event or, when <paramref name="body"/> carries an instanceStart,
+            a single occurrence of a recurring series. Set notify to true to send cancellation notices.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.DeleteMeetingInviteAsync(System.String,System.String,System.String,SmarterMail.Net.Models.Requests.DeleteEventBodyRequest,System.Threading.CancellationToken)">
+            <summary>Deletes a received meeting invitation or, when <paramref name="body"/> carries an instanceStart, one occurrence.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.GetOccurrenceDetailsAsync(System.String,System.String,System.String,SmarterMail.Net.Models.Requests.GetOccurrenceDetailsRequest,System.Threading.CancellationToken)">
+            <summary>Retrieves details for a single occurrence of a recurring event series.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.AcceptInvitationAsync(System.String,System.String,System.String,System.String,SmarterMail.Net.Models.Requests.AcceptMeetingInviteRequest,System.Threading.CancellationToken)">
+            <summary>Accepts a meeting invitation.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.DeclineInvitationAsync(System.String,System.String,System.String,System.String,SmarterMail.Net.Models.Requests.DeclineMeetingInviteRequest,System.Threading.CancellationToken)">
+            <summary>Declines a meeting invitation.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.TentativeInvitationAsync(System.String,System.String,System.String,System.String,SmarterMail.Net.Models.Requests.TentativeAcceptMeetingInviteRequest,System.Threading.CancellationToken)">
+            <summary>Tentatively accepts a meeting invitation.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.GetCalendarSourcesAsync(System.Threading.CancellationToken)">
+            <summary>Lists calendar sources (folders) available to the user.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.AddUserCalendarAsync(SmarterMail.Net.Models.Requests.AddUserCalendarRequest,System.Threading.CancellationToken)">
+            <summary>Creates a user calendar source.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.EditUserCalendarAsync(SmarterMail.Net.Models.Requests.EditUserCalendarRequest,System.Threading.CancellationToken)">
+            <summary>Updates a user calendar source.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.DeleteCalendarAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>Deletes a user calendar source.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.RenameUserCalendarAsync(SmarterMail.Net.Models.Requests.RenameUserCalendarRequest,System.Threading.CancellationToken)">
+            <summary>Renames a user calendar source.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.GetInternetCalendarsAsync(System.Threading.CancellationToken)">
+            <summary>Lists internet calendar subscriptions.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.AddOrEditInternetCalendarAsync(SmarterMail.Net.Models.Requests.AddOrEditInternetCalendarRequest,System.Threading.CancellationToken)">
+            <summary>Creates or updates an internet calendar subscription.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.DeleteInternetCalendarAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Deletes an internet calendar subscription.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.TestInternetCalendarAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Tests an internet calendar URL.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.ImportIcsFileAsync(System.String,System.String,System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <summary>Imports an ICS file into the specified calendar.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.ExportEventsAsync(System.Collections.Generic.IReadOnlyList{System.String},System.Threading.CancellationToken)">
+            <summary>Exports the specified events as an ICS file.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.GetEventsBetweenDatesAsync(System.String,System.String,SmarterMail.Net.Models.Requests.GetEventsBetweenDatesRequest,System.Threading.CancellationToken)">
+            <summary>Lists appointments for an owner/calendar within a date range.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.GetUserAvailabilityAsync(SmarterMail.Net.Models.Requests.GetUserAvailabilityRequest,System.Threading.CancellationToken)">
+            <summary>Retrieves free/busy availability for the given users on a given day.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.AddAttachmentAsync(System.String,System.String,System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <summary>Uploads a file under the given attachment GUID so a subsequent event save (with that GUID) binds it.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Calendar.ICalendarModule.DownloadAttachmentAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Downloads a previously bound event attachment from its (absolute) download URL.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Categories.CategoriesModule">
+            <summary>Implements category operations via the SmarterMail HTTP API.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Categories.CategoriesModule.#ctor(SmarterMail.Net.Http.ISmarterMailHttpClient)">
+            <summary>Initializes a new instance of <see cref="T:SmarterMail.Net.Modules.Categories.CategoriesModule"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Categories.CategoriesModule.GetCategoriesAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Categories.CategoriesModule.GetUserCategorySettingsAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Categories.CategoriesModule.UpdateUserCategorySettingsAsync(SmarterMail.Net.Models.Requests.UpdateUserCategorySettingsRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Categories.CategoriesModule.GetSharedCategorySettingsAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Categories.CategoriesModule.GetCategoryFiltersAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Categories.ICategoriesModule">
+            <summary>Operations for the authenticated user's mail and item categories.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Categories.ICategoriesModule.GetCategoriesAsync(System.Threading.CancellationToken)">
+            <summary>Retrieves the user's category list.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Categories.ICategoriesModule.GetUserCategorySettingsAsync(System.Threading.CancellationToken)">
+            <summary>Retrieves the user's category settings.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Categories.ICategoriesModule.UpdateUserCategorySettingsAsync(SmarterMail.Net.Models.Requests.UpdateUserCategorySettingsRequest,System.Threading.CancellationToken)">
+            <summary>Updates the user's category settings.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Categories.ICategoriesModule.GetSharedCategorySettingsAsync(System.Threading.CancellationToken)">
+            <summary>Retrieves category settings for shared folders.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Categories.ICategoriesModule.GetCategoryFiltersAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Retrieves category filters for the specified user.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Contacts.ContactsModule">
+            <summary>Implements contact operations via the SmarterMail HTTP API.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.#ctor(SmarterMail.Net.Http.ISmarterMailHttpClient)">
+            <summary>Initializes a new instance of <see cref="T:SmarterMail.Net.Modules.Contacts.ContactsModule"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.GetContactsAsync(SmarterMail.Net.Models.Requests.GetAllContactsRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.GetContactAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.GetContactGroupAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.GetAddressBookAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.GetContactSourcesAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.CreateAddressBookAsync(SmarterMail.Net.Models.Requests.AddressBookRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.RenameAddressBookAsync(SmarterMail.Net.Models.Requests.AddressBookRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.DeleteAddressBookAsync(SmarterMail.Net.Models.Requests.AddressBookRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.CreateContactAsync(System.String,System.String,SmarterMail.Net.Models.Requests.AddContactRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.UpdateContactAsync(System.String,System.String,System.Boolean,SmarterMail.Net.Models.Requests.EditContactRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.UpdateContactGroupAsync(System.String,System.String,SmarterMail.Net.Models.Requests.EditContactRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.DeleteContactsAsync(SmarterMail.Net.Models.Requests.DeleteContactsRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.ImportContactsAsync(System.String,System.String,SmarterMail.Net.Models.Requests.AddContactsRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.ExportContactAsync(System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.ExportContactsAsync(System.String,System.String,SmarterMail.Net.Models.Requests.ExportContactsRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.UploadContactImageAsync(System.String,System.String,System.String,System.Boolean,System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.GetGalImageLinkAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.GetGroupMembersAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.UnpackGroupAsync(System.String,System.String,System.Boolean,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.GetContactPhotoAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.ContactsModule.ParseContactImportAsync(System.String,System.IO.Stream,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Contacts.IContactsModule">
+            <summary>Operations for the authenticated user's contacts.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.GetContactsAsync(SmarterMail.Net.Models.Requests.GetAllContactsRequest,System.Threading.CancellationToken)">
+            <summary>Searches for contacts matching the specified criteria.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.GetContactAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>Retrieves a specific contact by ID, folder, and email address.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.GetContactGroupAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>Retrieves a contact group by owner, source, and group ID.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.GetAddressBookAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>Retrieves the authenticated user's contact folders (address books).</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.CreateAddressBookAsync(SmarterMail.Net.Models.Requests.AddressBookRequest,System.Threading.CancellationToken)">
+            <summary>Creates a personal address-book folder.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.RenameAddressBookAsync(SmarterMail.Net.Models.Requests.AddressBookRequest,System.Threading.CancellationToken)">
+            <summary>Renames a personal address-book folder.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.DeleteAddressBookAsync(SmarterMail.Net.Models.Requests.AddressBookRequest,System.Threading.CancellationToken)">
+            <summary>Deletes a personal address-book folder.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.CreateContactAsync(System.String,System.String,SmarterMail.Net.Models.Requests.AddContactRequest,System.Threading.CancellationToken)">
+            <summary>Creates a new contact for the specified user.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.UpdateContactAsync(System.String,System.String,System.Boolean,SmarterMail.Net.Models.Requests.EditContactRequest,System.Threading.CancellationToken)">
+            <summary>Updates an existing contact.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.DeleteContactsAsync(SmarterMail.Net.Models.Requests.DeleteContactsRequest,System.Threading.CancellationToken)">
+            <summary>Deletes one or more contacts in bulk.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.ImportContactsAsync(System.String,System.String,SmarterMail.Net.Models.Requests.AddContactsRequest,System.Threading.CancellationToken)">
+            <summary>Imports a collection of contacts into the specified folder.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.ExportContactAsync(System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>Exports a single contact to CSV or vCard format.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.ExportContactsAsync(System.String,System.String,SmarterMail.Net.Models.Requests.ExportContactsRequest,System.Threading.CancellationToken)">
+            <summary>Exports multiple contacts to CSV or vCard format.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.UploadContactImageAsync(System.String,System.String,System.String,System.Boolean,System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <summary>Uploads a contact photo image for the specified contact.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.GetGalImageLinkAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Gets the GAL (Global Address List) image link for the specified email address.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.GetGroupMembersAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Gets all contacts available as group members for the specified user.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.UnpackGroupAsync(System.String,System.String,System.Boolean,System.Threading.CancellationToken)">
+            <summary>Expands a contact group into a flat list of recipient emails.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.GetContactPhotoAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Downloads the raw bytes of a contact photo from the given URL or path.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.ParseContactImportAsync(System.String,System.IO.Stream,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Parses a CSV or VCF file and returns the contacts it contains, without committing them.
+            Calls POST /api/upload with context=contact-import.
+            </summary>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.FileStorage.FileStorageModule">
+            <summary>Implements file storage operations via the SmarterMail HTTP API.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.FileStorageModule.#ctor(SmarterMail.Net.Http.ISmarterMailHttpClient)">
+            <summary>Initializes a new instance of <see cref="T:SmarterMail.Net.Modules.FileStorage.FileStorageModule"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.FileStorageModule.GetFoldersAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.FileStorageModule.GetFilesAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.FileStorageModule.GetDiskUsageAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.FileStorageModule.CreateFolderAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.FileStorageModule.DeleteFolderAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.FileStorageModule.DeleteFilesAsync(SmarterMail.Net.Models.Requests.DeleteCloudStorageFilesRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.FileStorageModule.DownloadFileAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.FileStorageModule.RemoveAttachedFileAsync(SmarterMail.Net.Models.Requests.DeleteRemovedAttachedFilesRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.FileStorage.IFileStorageModule">
+            <summary>Operations for the authenticated user's file storage.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.IFileStorageModule.GetFoldersAsync(System.Threading.CancellationToken)">
+            <summary>Retrieves the root file storage folder listing.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.IFileStorageModule.GetFilesAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>Retrieves files within a specific cloud storage folder.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.IFileStorageModule.GetDiskUsageAsync(System.Threading.CancellationToken)">
+            <summary>Retrieves disk usage statistics for the current user.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.IFileStorageModule.CreateFolderAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Creates a new folder in file storage.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.IFileStorageModule.DeleteFolderAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Deletes a folder from file storage.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.IFileStorageModule.DeleteFilesAsync(SmarterMail.Net.Models.Requests.DeleteCloudStorageFilesRequest,System.Threading.CancellationToken)">
+            <summary>Deletes one or more files from file storage.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.IFileStorageModule.DownloadFileAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Downloads a file from file storage as a raw stream.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.FileStorage.IFileStorageModule.RemoveAttachedFileAsync(SmarterMail.Net.Models.Requests.DeleteRemovedAttachedFilesRequest,System.Threading.CancellationToken)">
+            <summary>Removes one or more attached files (by file reference) from a calendar/message folder.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Folders.FoldersModule">
+            <summary>Implements folder operations via the SmarterMail HTTP API.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.FoldersModule.#ctor(SmarterMail.Net.Http.ISmarterMailHttpClient)">
+            <summary>Initializes a new instance of <see cref="T:SmarterMail.Net.Modules.Folders.FoldersModule"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.FoldersModule.GetEmailFoldersAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.FoldersModule.GetAllFoldersAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.FoldersModule.CreateFolderAsync(SmarterMail.Net.Models.Requests.AddFolderRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.FoldersModule.UpdateFolderAsync(SmarterMail.Net.Models.Requests.EditFolderRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.FoldersModule.DeleteFolderAsync(SmarterMail.Net.Models.Requests.DeleteFolderRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.FoldersModule.GetVirtualFoldersAsync(SmarterMail.Net.Models.Requests.ListAllVirtualFoldersRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.FoldersModule.GetVirtualFolderAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.FoldersModule.AttachToVirtualFolderAsync(SmarterMail.Net.Models.Requests.AttachToVirtualFoldersRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.FoldersModule.DetachFromVirtualFolderAsync(SmarterMail.Net.Models.Requests.DetachFromVirtualFoldersRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Folders.IFoldersModule">
+            <summary>Operations for the authenticated user's email folders and virtual folders.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.IFoldersModule.GetEmailFoldersAsync(System.Threading.CancellationToken)">
+            <summary>Retrieves the list of email folders for the current user.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.IFoldersModule.GetAllFoldersAsync(System.Threading.CancellationToken)">
+            <summary>Retrieves all folders across all types.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.IFoldersModule.CreateFolderAsync(SmarterMail.Net.Models.Requests.AddFolderRequest,System.Threading.CancellationToken)">
+            <summary>Creates a new email folder.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.IFoldersModule.UpdateFolderAsync(SmarterMail.Net.Models.Requests.EditFolderRequest,System.Threading.CancellationToken)">
+            <summary>Updates an existing email folder.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.IFoldersModule.DeleteFolderAsync(SmarterMail.Net.Models.Requests.DeleteFolderRequest,System.Threading.CancellationToken)">
+            <summary>Deletes an email folder.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.IFoldersModule.GetVirtualFoldersAsync(SmarterMail.Net.Models.Requests.ListAllVirtualFoldersRequest,System.Threading.CancellationToken)">
+            <summary>Retrieves all virtual (smart) folders.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.IFoldersModule.GetVirtualFolderAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Retrieves a specific virtual folder by ID.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.IFoldersModule.AttachToVirtualFolderAsync(SmarterMail.Net.Models.Requests.AttachToVirtualFoldersRequest,System.Threading.CancellationToken)">
+            <summary>Attaches folders to a virtual folder.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Folders.IFoldersModule.DetachFromVirtualFolderAsync(SmarterMail.Net.Models.Requests.DetachFromVirtualFoldersRequest,System.Threading.CancellationToken)">
+            <summary>Detaches folders from a virtual folder.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Mail.IMailModule">
+            <summary>Operations for the authenticated user's email mailbox.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.GetFoldersAsync(System.Threading.CancellationToken)">
+            <summary>Retrieves all email folders for the authenticated user.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.GetFoldersTreeAsync(System.Threading.CancellationToken)">
+            <summary>
+            Retrieves all email folders as a normalized hierarchy.
+            Parent relationships are resolved by <c>folderIdParent</c> first and by path fallback when needed.
+            </summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.GetMessagesAsync(SmarterMail.Net.Models.Requests.GetMessagesRequest,System.Threading.CancellationToken)">
+            <summary>Retrieves a paginated list of messages from a folder.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.GetMessageAsync(SmarterMail.Net.Models.Requests.GetMessageRequest,System.Threading.CancellationToken)">
+            <summary>Retrieves a single message with full content.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.SendMessageAsync(SmarterMail.Net.Models.Requests.SendMessageRequest,System.Threading.CancellationToken)">
+            <summary>Sends a new, reply, or forwarded email message.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.UndoMessageAsync(SmarterMail.Net.Models.Requests.UndoMessageRequest,System.Threading.CancellationToken)">
+            <summary>Cancels a delayed or scheduled email before it is sent. Moves it back to Drafts unless <c>KeepInFolder</c> is set.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.MoveMessagesAsync(SmarterMail.Net.Models.Requests.MoveMessagesRequest,System.Threading.CancellationToken)">
+            <summary>Moves one or more messages to a different folder.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.DeleteMessagesAsync(SmarterMail.Net.Models.Requests.DeleteMessagesRequest,System.Threading.CancellationToken)">
+            <summary>Deletes one or more messages from a folder.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.SearchMessagesAsync(SmarterMail.Net.Models.Requests.SearchMessagesRequest,System.Threading.CancellationToken)">
+            <summary>Searches for messages matching specified criteria.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.MarkMessagesAsync(SmarterMail.Net.Models.Requests.MessagesPatchRequest,System.Threading.CancellationToken)">
+            <summary>Updates flags on one or more messages (read, unread, flagged, etc.).</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.FlagMessagesAsync(SmarterMail.Net.Models.Requests.MessagesFlagPatchRequest,System.Threading.CancellationToken)">
+            <summary>Updates the follow-up flag on one or more messages.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.MessagesCategoryPatchAsync(SmarterMail.Net.Models.Requests.MessagesCategoryPatchRequest,System.Threading.CancellationToken)">
+            <summary>Assigns or unassigns categories to one or more messages.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.PurgeDeletedAsync(SmarterMail.Net.Models.Requests.PurgeMarkedAsDeletedFolderRequest,System.Threading.CancellationToken)">
+            <summary>Permanently removes messages marked for deletion from a folder.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.GetAttachmentLinksAsync(SmarterMail.Net.Models.Requests.GenerateAttachmentLinksRequest,System.Threading.CancellationToken)">
+            <summary>Generates temporary download links for message attachments.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.DownloadAttachmentAsync(SmarterMail.Net.Models.Requests.GenerateAttachmentLinksRequest,System.String,System.Threading.CancellationToken)">
+            <summary>Downloads the raw bytes of a single message attachment by part id. Internally fetches a time-limited link, then performs a GET against it.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.GetInlineAttachmentLinksAsync(SmarterMail.Net.Models.Requests.GenerateMessageInlineLinksRequest,System.Threading.CancellationToken)">
+            <summary>Generates inline attachment links for a message.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.GetHtmlWithInlineImagesAsync(SmarterMail.Net.Models.Requests.GetMessageRequest,System.Threading.CancellationToken)">
+            <summary>
+            Retrieves a message and returns its HTML body with all <c>cid:</c> inline image references
+            replaced by time-limited URLs. Returns <c>null</c> when the message has no HTML body.
+            </summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.AddAttachmentAsync(System.String,System.String,System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <summary>Uploads an attachment for a draft or outgoing message.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.DraftPutAsync(System.String,SmarterMail.Net.Models.Requests.SendMessageRequest,System.Threading.CancellationToken)">
+            <summary>
+            Saves a draft via the draft-put endpoint and binds any staged attachments to it.
+            Returns the <c>uid</c> of the saved draft. Typically called before
+            <see cref="M:SmarterMail.Net.Modules.Mail.IMailModule.SendMessageAsync(SmarterMail.Net.Models.Requests.SendMessageRequest,System.Threading.CancellationToken)"/> when the message has attachments.
+            </summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.GetFolderStatsAsync(System.String,SmarterMail.Net.Models.Requests.GetFolderInfoRequest,System.Threading.CancellationToken)">
+            <summary>Retrieves statistics and information for a specific folder by path.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.GetRawMessageAsync(SmarterMail.Net.Models.Requests.GetRawMessageRequest,System.Threading.CancellationToken)">
+            <summary>Retrieves the raw RFC 2822 source of a message.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.ExportMessageAsync(SmarterMail.Net.Models.Requests.ExportMessagesRequest,System.Threading.CancellationToken)">
+            <summary>Exports a single message as EML bytes.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Mail.MailModule">
+            <summary>Implements email mailbox operations via the SmarterMail HTTP API.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.#ctor(SmarterMail.Net.Http.ISmarterMailHttpClient)">
+            <summary>Initializes a new instance of <see cref="T:SmarterMail.Net.Modules.Mail.MailModule"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.GetFoldersAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.GetFoldersTreeAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.GetMessagesAsync(SmarterMail.Net.Models.Requests.GetMessagesRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.GetMessageAsync(SmarterMail.Net.Models.Requests.GetMessageRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.SendMessageAsync(SmarterMail.Net.Models.Requests.SendMessageRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.UndoMessageAsync(SmarterMail.Net.Models.Requests.UndoMessageRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.MoveMessagesAsync(SmarterMail.Net.Models.Requests.MoveMessagesRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.DeleteMessagesAsync(SmarterMail.Net.Models.Requests.DeleteMessagesRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.SearchMessagesAsync(SmarterMail.Net.Models.Requests.SearchMessagesRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.MarkMessagesAsync(SmarterMail.Net.Models.Requests.MessagesPatchRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.FlagMessagesAsync(SmarterMail.Net.Models.Requests.MessagesFlagPatchRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.MessagesCategoryPatchAsync(SmarterMail.Net.Models.Requests.MessagesCategoryPatchRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.PurgeDeletedAsync(SmarterMail.Net.Models.Requests.PurgeMarkedAsDeletedFolderRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.GetAttachmentLinksAsync(SmarterMail.Net.Models.Requests.GenerateAttachmentLinksRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.DownloadAttachmentAsync(SmarterMail.Net.Models.Requests.GenerateAttachmentLinksRequest,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.GetInlineAttachmentLinksAsync(SmarterMail.Net.Models.Requests.GenerateMessageInlineLinksRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.GetHtmlWithInlineImagesAsync(SmarterMail.Net.Models.Requests.GetMessageRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.AddAttachmentAsync(System.String,System.String,System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.DraftPutAsync(System.String,SmarterMail.Net.Models.Requests.SendMessageRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.GetFolderStatsAsync(System.String,SmarterMail.Net.Models.Requests.GetFolderInfoRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.GetRawMessageAsync(SmarterMail.Net.Models.Requests.GetRawMessageRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.ExportMessageAsync(SmarterMail.Net.Models.Requests.ExportMessagesRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Notes.INotesModule">
+            <summary>Operations for the authenticated user's notes.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notes.INotesModule.GetNotesAsync(SmarterMail.Net.Models.Requests.GetAllNotesRequest,System.Threading.CancellationToken)">
+            <summary>Searches for notes matching the specified criteria.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notes.INotesModule.GetNoteAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>Retrieves a specific note by ID, folder, and owner.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notes.INotesModule.CreateNoteAsync(System.String,System.String,SmarterMail.Net.Models.Requests.AddNoteRequest,System.Threading.CancellationToken)">
+            <summary>Creates a new note in the specified folder.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notes.INotesModule.UpdateNoteAsync(System.String,System.String,System.String,SmarterMail.Net.Models.Requests.EditNoteRequest,System.Threading.CancellationToken)">
+            <summary>Updates an existing note.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notes.INotesModule.DeleteNoteAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>Deletes a specific note.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notes.INotesModule.GetSourcesAsync(System.Threading.CancellationToken)">
+            <summary>Lists the user's note sources (note folders).</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Notes.NotesModule">
+            <summary>Implements note operations via the SmarterMail HTTP API.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notes.NotesModule.#ctor(SmarterMail.Net.Http.ISmarterMailHttpClient)">
+            <summary>Initializes a new instance of <see cref="T:SmarterMail.Net.Modules.Notes.NotesModule"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notes.NotesModule.GetNotesAsync(SmarterMail.Net.Models.Requests.GetAllNotesRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notes.NotesModule.GetNoteAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notes.NotesModule.CreateNoteAsync(System.String,System.String,SmarterMail.Net.Models.Requests.AddNoteRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notes.NotesModule.UpdateNoteAsync(System.String,System.String,System.String,SmarterMail.Net.Models.Requests.EditNoteRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notes.NotesModule.DeleteNoteAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notes.NotesModule.GetSourcesAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Notifications.INotificationsModule">
+            <summary>Operations for the authenticated user's notifications and alerts.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notifications.INotificationsModule.GetNotificationsAsync(System.Threading.CancellationToken)">
+            <summary>Retrieves the list of active notifications for the current user.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notifications.INotificationsModule.DismissNotificationAsync(SmarterMail.Net.Models.Requests.DismissRequest,System.Threading.CancellationToken)">
+            <summary>Dismisses one or more notifications by ID.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notifications.INotificationsModule.DismissAllNotificationsAsync(System.Threading.CancellationToken)">
+            <summary>Dismisses all active notifications for the current user.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notifications.INotificationsModule.SnoozeNotificationAsync(SmarterMail.Net.Models.Requests.SnoozeRequest,System.Threading.CancellationToken)">
+            <summary>Snoozes one or more notifications by ID.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Notifications.NotificationsModule">
+            <summary>Implements notification operations via the SmarterMail HTTP API.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notifications.NotificationsModule.#ctor(SmarterMail.Net.Http.ISmarterMailHttpClient)">
+            <summary>Initializes a new instance of <see cref="T:SmarterMail.Net.Modules.Notifications.NotificationsModule"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notifications.NotificationsModule.GetNotificationsAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notifications.NotificationsModule.DismissNotificationAsync(SmarterMail.Net.Models.Requests.DismissRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notifications.NotificationsModule.DismissAllNotificationsAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notifications.NotificationsModule.SnoozeNotificationAsync(SmarterMail.Net.Models.Requests.SnoozeRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Tasks.ITasksModule">
+            <summary>Operations for the authenticated user's tasks.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Tasks.ITasksModule.GetTasksAsync(SmarterMail.Net.Models.Requests.GetAllTasksRequest,System.Threading.CancellationToken)">
+            <summary>Searches for tasks matching the specified criteria.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Tasks.ITasksModule.GetTaskAsync(System.String,System.String,System.String,System.Boolean,System.Threading.CancellationToken)">
+            <summary>Retrieves a specific task by owner, source, and task ID.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Tasks.ITasksModule.SaveTaskAsync(SmarterMail.Net.Models.Requests.SaveTasksRequest,System.Threading.CancellationToken)">
+            <summary>Creates or updates a task (upsert).</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Tasks.ITasksModule.DeleteTaskAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>Deletes a task by owner, source, and task ID.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Tasks.ITasksModule.GetSourcesAsync(System.Threading.CancellationToken)">
+            <summary>Lists the user's task sources (task lists).</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Tasks.TasksModule">
+            <summary>Implements task operations via the SmarterMail HTTP API.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Tasks.TasksModule.#ctor(SmarterMail.Net.Http.ISmarterMailHttpClient)">
+            <summary>Initializes a new instance of <see cref="T:SmarterMail.Net.Modules.Tasks.TasksModule"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Tasks.TasksModule.GetTasksAsync(SmarterMail.Net.Models.Requests.GetAllTasksRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Tasks.TasksModule.GetTaskAsync(System.String,System.String,System.String,System.Boolean,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Tasks.TasksModule.SaveTaskAsync(SmarterMail.Net.Models.Requests.SaveTasksRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Tasks.TasksModule.DeleteTaskAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Tasks.TasksModule.GetSourcesAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule">
+            <summary>Operations for the authenticated user's account settings, mail settings, signatures, and auto-reply.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.GetUserAsync(System.Threading.CancellationToken)">
+            <summary>Retrieves the current user's account data.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.UpdateUserAsync(SmarterMail.Net.Models.Requests.UpdateUserRequest,System.Threading.CancellationToken)">
+            <summary>Updates the current user's account data.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.GetUserMailSettingsAsync(System.Boolean,System.Threading.CancellationToken)">
+            <summary>Retrieves the user's mail settings.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.UpdateUserMailSettingsAsync(SmarterMail.Net.Models.Requests.SetUsersMailSettingsRequest,System.Threading.CancellationToken)">
+            <summary>Updates the user's mail settings.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.GetSignaturesAsync(System.Threading.CancellationToken)">
+            <summary>Retrieves all email signatures for the current user.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.CreateSignatureAsync(SmarterMail.Net.Models.Requests.AddUserSignatureRequest,System.Threading.CancellationToken)">
+            <summary>Creates a new email signature.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.UpdateSignatureAsync(SmarterMail.Net.Models.Requests.UpdateUserSignatureRequest,System.Threading.CancellationToken)">
+            <summary>Updates an existing email signature.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.DeleteSignatureAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Deletes an email signature by ID.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.GetUserSignatureMapsAsync(System.Threading.CancellationToken)">
+            <summary>Retrieves the authenticated user's own address-to-signature mappings.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.GetSignaturesMappingsAsync(System.Threading.CancellationToken)">
+            <summary>Retrieves all address-to-signature mappings (user + domain + alias).</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.SetSignaturesMappingsAsync(SmarterMail.Net.Models.Requests.SetSignaturesMappingsRequest,System.Threading.CancellationToken)">
+            <summary>Sets address-to-signature mappings. Full-replacement: send complete list in SignatureMaps.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.GetEmailsSignaturesAsync(System.Threading.CancellationToken)">
+            <summary>Retrieves the user's and domain's email signatures (used for compose injection).</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.GetAutoResponderAsync(System.Boolean,System.Threading.CancellationToken)">
+            <summary>Retrieves the auto-responder (out-of-office) settings.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.UpdateAutoResponderAsync(SmarterMail.Net.Models.Requests.AutoRespondersSetRequest,System.Threading.CancellationToken)">
+            <summary>Updates the auto-responder (out-of-office) settings.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.CheckSenderBlockedAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Checks whether a sender's email address is on the user's block list. Returns true if blocked.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.BlockSendersAsync(SmarterMail.Net.Models.Requests.BlockSendersRequest,System.Threading.CancellationToken)">
+            <summary>Adds one or more senders to the user's block list.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.UnblockSendersAsync(SmarterMail.Net.Models.Requests.UnblockSendersRequest,System.Threading.CancellationToken)">
+            <summary>Removes one or more senders from the user's block list.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.GetSpamSettingsAsync(System.Threading.CancellationToken)">
+            <summary>Retrieves the user's spam filter settings.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.UpdateSpamSettingsAsync(SmarterMail.Net.Models.Requests.SetSpamSettingsRequest,System.Threading.CancellationToken)">
+            <summary>Updates the user's spam filter settings.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.IUserSettingsModule.SearchAutoCompleteListAsync(SmarterMail.Net.Models.Requests.SearchAutoCompleteListPostRequest,System.Threading.CancellationToken)">
+            <summary>Searches the auto-complete address list (GAL, contacts, and history) for recipient suggestions.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.UserSettings.UserSettingsModule">
+            <summary>Implements user settings operations via the SmarterMail HTTP API.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.#ctor(SmarterMail.Net.Http.ISmarterMailHttpClient)">
+            <summary>Initializes a new instance of <see cref="T:SmarterMail.Net.Modules.UserSettings.UserSettingsModule"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.GetUserAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.UpdateUserAsync(SmarterMail.Net.Models.Requests.UpdateUserRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.GetUserMailSettingsAsync(System.Boolean,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.UpdateUserMailSettingsAsync(SmarterMail.Net.Models.Requests.SetUsersMailSettingsRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.GetSignaturesAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.CreateSignatureAsync(SmarterMail.Net.Models.Requests.AddUserSignatureRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.UpdateSignatureAsync(SmarterMail.Net.Models.Requests.UpdateUserSignatureRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.DeleteSignatureAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.GetUserSignatureMapsAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.GetSignaturesMappingsAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.SetSignaturesMappingsAsync(SmarterMail.Net.Models.Requests.SetSignaturesMappingsRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.GetEmailsSignaturesAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.GetAutoResponderAsync(System.Boolean,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.UpdateAutoResponderAsync(SmarterMail.Net.Models.Requests.AutoRespondersSetRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.CheckSenderBlockedAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.BlockSendersAsync(SmarterMail.Net.Models.Requests.BlockSendersRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.UnblockSendersAsync(SmarterMail.Net.Models.Requests.UnblockSendersRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.GetSpamSettingsAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.UpdateSpamSettingsAsync(SmarterMail.Net.Models.Requests.SetSpamSettingsRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.UserSettings.UserSettingsModule.SearchAutoCompleteListAsync(SmarterMail.Net.Models.Requests.SearchAutoCompleteListPostRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>

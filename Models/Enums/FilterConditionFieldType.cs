@@ -1,0 +1,36 @@
+
+namespace SmarterMail.Net.Models.Enums;
+
+public enum FilterConditionFieldType
+{
+    FromAddress = 0,
+    FromDomain = 1,
+    FromTrustedSender = 2,
+    WordsInSubject = 3,
+    WordsInBody = 4,
+    WordsInSubjectOrBody = 5,
+    WordsInFrom = 6,
+    WordsInTo = 7,
+    WordsInHeaders = 8,
+    WordsInMessage = 9,
+    ToAddress = 10,
+    ToDomain = 11,
+    ToMe = 12,
+    MyNameInTo = 13,
+    MyNameNotInTo = 14,
+    MyNameInToOrCC = 15,
+    AttHas = 16,
+    AttFilename = 17,
+    AttExtension = 18,
+    AttSize = 19,
+    PriorityHigh = 20,
+    PriorityNormal = 21,
+    PriorityLow = 22,
+    AutomatedMessage = 23,
+    IsAuthenticated = 24,
+    MessageSizeOver = 25,
+    MessageSizeUnder = 26,
+    DateRange = 27,
+    SendingServerIP = 28,
+    SpamWeight = 29,
+}

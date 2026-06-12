@@ -1,0 +1,36 @@
+
+namespace SmarterMail.Net.Models.Enums;
+
+public enum RoutingRuleConditionFieldType
+{
+    SendingFromAddress = 0,
+    SendingFromDomain = 1,
+    SendingToAddress = 2,
+    SendingToDomain = 3,
+    WordsInSubject = 4,
+    WordsInBody = 5,
+    MessageSizeOver = 6,
+    MessageSizeUnder = 7,
+    HasAttachment = 8,
+    AttachmentExtension = 9,
+    MessagePriority = 10,
+    IsAuthenticated = 11,
+    IsBeingForwarded = 12,
+    IsSignedOrEncrypted = 13,
+    SpamScore = 14,
+    MessageType = 15,
+    SenderIsWhitelisted = 16,
+    WordsInSubjectOrBody = 17,
+    WordsInFrom = 18,
+    WordsInTo = 19,
+    WordsInHeaders = 20,
+    WordsInMessage = 21,
+    TimeOfDay = 22,
+    DayOfWeek = 23,
+    AttachmentFilename = 24,
+    AttachmentSizeOver = 25,
+    SendingFromIPRange = 26,
+    GeographicLocation = 27,
+    SpamLevel = 28,
+    ExternalSender = 29,
+}
