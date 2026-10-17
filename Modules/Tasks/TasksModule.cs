@@ -33,6 +33,14 @@ public sealed class TasksModule : ITasksModule
     }
 
     /// <inheritdoc/>
+    public Task<GetTasksInSourceResponse> GetTasksInSourceAsync(string owner, string sourceId, CancellationToken cancellationToken = default)
+    {
+        // Trailing slash and no task id: the live API returns every task in the source as a "details" array.
+        var url = $"/api/v1/tasks/{Uri.EscapeDataString(owner)}/{Uri.EscapeDataString(sourceId)}/";
+        return _http.GetAsync<GetTasksInSourceResponse>(url, cancellationToken);
+    }
+
+    /// <inheritdoc/>
     public async Task<SaveTasksResponse> SaveTaskAsync(SaveTasksRequest request, CancellationToken cancellationToken = default)
     {
         // Live API expects a JSON array of full task objects at /save/ (trailing slash) and returns an array.

@@ -2,11 +2,25 @@
 #nullable enable
 
 using System.Text.Json;
+using SmarterMail.Net.Models.Enums;
 
 namespace SmarterMail.Net.Models.Requests;
 
 public record PutDraftRequest
 {
+    /// <summary>Message importance (serialized as a string, e.g. "normal"). Mirrors the send contract.</summary>
+    public MessageImportance Importance { get; init; }
+
+    /// <summary>
+    /// Numeric draft priority the official webmail sends (<c>priority:1</c>). Optional; omitted when null.
+    /// Distinct from <see cref="Importance"/> — exact value scheme is undocumented, so leave unset unless
+    /// you have a verified value.
+    /// </summary>
+    public int? Priority { get; init; }
+
+    /// <summary>ISO-8601 UTC scheduled-send time, if the draft is queued for later delivery.</summary>
+    public string? ScheduledSend { get; init; }
+
     public bool IsReply { get; init; }
     public bool IsForward { get; init; }
     public string? DraftAttachedMessage { get; init; }

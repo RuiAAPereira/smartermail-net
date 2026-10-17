@@ -69,12 +69,15 @@ public interface IMailModule
 
     /// <summary>
     /// Saves a draft via the draft-put endpoint and binds any staged attachments to it.
-    /// Returns the <c>uid</c> of the saved draft. Typically called before
-    /// <see cref="SendMessageAsync"/> when the message has attachments.
+    /// Takes the draft-specific <see cref="PutDraftRequest"/> contract: it carries the
+    /// reconciliation fields (<c>excludeFiles</c>/<c>draftExcludeFiles</c>/<c>originalCidString</c>/…)
+    /// the server needs to commit staged uploads to the draft. Sending the send contract
+    /// (<see cref="SendMessageRequest"/>) instead silently drops attachments from the saved draft.
+    /// Returns the <c>uid</c> of the saved draft.
     /// </summary>
     Task<DraftPutResponse> DraftPutAsync(
         string attachGuid,
-        SendMessageRequest request,
+        PutDraftRequest request,
         CancellationToken cancellationToken = default);
 
     /// <summary>Retrieves statistics and information for a specific folder by path.</summary>

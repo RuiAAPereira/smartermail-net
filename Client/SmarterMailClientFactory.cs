@@ -5,6 +5,7 @@ using SmarterMail.Net.Http;
 using SmarterMail.Net.Modules.Calendar;
 using SmarterMail.Net.Modules.Categories;
 using SmarterMail.Net.Modules.Contacts;
+using SmarterMail.Net.Modules.Events;
 using SmarterMail.Net.Modules.FileStorage;
 using SmarterMail.Net.Modules.Folders;
 using SmarterMail.Net.Modules.Mail;
@@ -53,6 +54,7 @@ internal sealed class SmarterMailClientFactory : ISmarterMailClientFactory
             new CategoriesModule(http),
             new UserSettingsModule(http),
             new FoldersModule(http),
-            new FileStorageModule(http));
+            new FileStorageModule(http),
+            new EventHooksModule(http));
     }
 }

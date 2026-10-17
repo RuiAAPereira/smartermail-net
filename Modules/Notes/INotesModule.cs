@@ -1,4 +1,4 @@
-#nullable enable
+﻿#nullable enable
 
 using SmarterMail.Net.Models.Requests;
 using SmarterMail.Net.Models.Responses;
@@ -10,6 +10,9 @@ public interface INotesModule
 {
     /// <summary>Searches for notes matching the specified criteria.</summary>
     Task<GetAllNotesResponse> GetNotesAsync(GetAllNotesRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>Lists all notes in a single source via the web client's per-source route.</summary>
+    Task<GetNotesInSourceResponse> GetNotesInSourceAsync(string owner, string sourceId, CancellationToken cancellationToken = default);
 
     /// <summary>Retrieves a specific note by ID, folder, and owner.</summary>
     Task<GetNoteResponse> GetNoteAsync(string noteId, string folderId, string user = "", CancellationToken cancellationToken = default);

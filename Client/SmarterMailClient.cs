@@ -3,6 +3,7 @@ using SmarterMail.Net.Authentication;
 using SmarterMail.Net.Modules.Calendar;
 using SmarterMail.Net.Modules.Categories;
 using SmarterMail.Net.Modules.Contacts;
+using SmarterMail.Net.Modules.Events;
 using SmarterMail.Net.Modules.FileStorage;
 using SmarterMail.Net.Modules.Folders;
 using SmarterMail.Net.Modules.Mail;
@@ -50,6 +51,9 @@ public sealed class SmarterMailClient : IAsyncDisposable
     /// <summary>Operations for the authenticated user's file storage.</summary>
     public IFileStorageModule FileStorage { get; }
 
+    /// <summary>Operations for the authenticated user's event hooks (events, actions, webhooks).</summary>
+    public IEventHooksModule EventHooks { get; }
+
     /// <summary>Initializes a new instance of <see cref="SmarterMailClient"/>.</summary>
     public SmarterMailClient(
         SmarterMailAuthenticator authenticator,
@@ -62,7 +66,8 @@ public sealed class SmarterMailClient : IAsyncDisposable
         ICategoriesModule categories,
         IUserSettingsModule userSettings,
         IFoldersModule folders,
-        IFileStorageModule fileStorage)
+        IFileStorageModule fileStorage,
+        IEventHooksModule eventHooks)
     {
         _authenticator = authenticator;
         Mail = mail;
@@ -75,6 +80,7 @@ public sealed class SmarterMailClient : IAsyncDisposable
         UserSettings = userSettings;
         Folders = folders;
         FileStorage = fileStorage;
+        EventHooks = eventHooks;
     }
 
     /// <inheritdoc/>

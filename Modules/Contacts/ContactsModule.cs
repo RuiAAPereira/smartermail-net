@@ -23,9 +23,9 @@ public sealed class ContactsModule : IContactsModule
         => _http.PostAsync<GetAllContactsResponse>("/api/v1/contacts/contacts-all", request, cancellationToken);
 
     /// <inheritdoc/>
-    public Task<GetContactResponse> GetContactAsync(string contactId, string folder, string emailAddress, CancellationToken cancellationToken = default)
+    public Task<GetContactResponse> GetContactAsync(string user, string sourceId, string contactId, CancellationToken cancellationToken = default)
         => _http.GetAsync<GetContactResponse>(
-            $"/api/v1/contacts/contact/{Uri.EscapeDataString(contactId)}/{Uri.EscapeDataString(folder)}/{Uri.EscapeDataString(emailAddress)}",
+            $"/api/v1/contacts/get/{Uri.EscapeDataString(user)}/{Uri.EscapeDataString(sourceId)}/{Uri.EscapeDataString(contactId)}",
             cancellationToken);
 
     /// <inheritdoc/>
@@ -74,9 +74,13 @@ public sealed class ContactsModule : IContactsModule
 
     /// <inheritdoc/>
     public Task<EditContactResponse> UpdateContactAsync(string user, string sourceId, bool domainContact, EditContactRequest request, CancellationToken cancellationToken = default)
-        => _http.PostAsync<EditContactResponse>(
-            $"/api/v1/contacts/contact/{Uri.EscapeDataString(user)}/{Uri.EscapeDataString(sourceId)}/{domainContact.ToString().ToLowerInvariant()}",
-            request, cancellationToken);
+    {
+        var path = $"/api/v1/contacts/contact/{Uri.EscapeDataString(user)}";
+        if (!string.IsNullOrWhiteSpace(sourceId))
+            path += "/" + Uri.EscapeDataString(sourceId);
+        path += "/" + domainContact.ToString().ToLowerInvariant();
+        return _http.PostAsync<EditContactResponse>(path, request, cancellationToken);
+    }
 
     /// <inheritdoc/>
     public Task<EditContactResponse> UpdateContactGroupAsync(string user, string sourceId, EditContactRequest request, CancellationToken cancellationToken = default)
@@ -86,7 +90,12 @@ public sealed class ContactsModule : IContactsModule
 
     /// <inheritdoc/>
     public Task<DeleteContactsResponse> DeleteContactsAsync(DeleteContactsRequest request, CancellationToken cancellationToken = default)
-        => _http.PostAsync<DeleteContactsResponse>("/api/v1/contacts/delete-bulk", request, cancellationToken);
+        // delete-bulk binds the request body directly to a ContactSelect array — the body must be
+        // a bare JSON array ([{sourceOwner,sourceId,id}]), not an object wrapping a "contacts" field.
+        => _http.PostAsync<DeleteContactsResponse>(
+            "/api/v1/contacts/delete-bulk",
+            request.Contacts ?? Array.Empty<DeleteContactItem>(),
+            cancellationToken);
 
     /// <inheritdoc/>
     public Task<AddContactsResponse> ImportContactsAsync(string user, string folderId, AddContactsRequest request, CancellationToken cancellationToken = default)

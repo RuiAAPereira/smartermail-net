@@ -1,31 +1,37 @@
-
 #nullable enable
 
+using System;
+using System.Collections.Generic;
 using System.Text.Json;
+using SmarterMail.Net.Models.Shared;
 
 namespace SmarterMail.Net.Models.Requests;
 
+/// <summary>
+/// Request body for POST /api/v1/settings/event-hook (AddEventHook). Models the event-hook
+/// envelope verified against the live API, not a single action.
+/// </summary>
 public record AddEventHookRequest
 {
-    public bool Constrained { get; init; }
-    public string? ConstraintFrequency { get; init; }
-    public string? ConstraintKey { get; init; }
-    public int DefaultFrequencyInMinutes { get; init; }
-    public long EventActionID { get; init; }
-    public JsonElement? Inputs { get; init; }
-    public string? DescriptionResourceId { get; init; }
-    public bool Hidden { get; init; }
-    public SmarterMail.Net.Models.Enums.ConditionInputType InputType { get; init; }
-    public string? Key { get; init; }
-    public string? PrefillKey { get; init; }
-    public bool Required { get; init; }
-    public JsonElement? LastOccuredMapping { get; init; }
-    public DateTime? LastOccuredUTC { get; init; }
-    public SmarterMail.Net.Models.Enums.EventRequirements Requires { get; init; }
-    public bool ShowVariables { get; init; }
-    public bool DidTrigger { get; init; }
-    public SmarterMail.Net.Models.Enums.ActionRecipientType RecipientType { get; init; }
-    public SmarterMail.Net.Models.Enums.ActionRecipientType SupportedActionRecipients { get; init; }
+    public bool IsNew { get; init; } = true;
+    public bool Enabled { get; init; } = true;
+
+    /// <summary>Numeric event id. Received mail = 30000 (LocalMessageDelivered).</summary>
+    public long EventID { get; init; }
+
+    /// <summary>Category resource id, e.g. "@Email".</summary>
+    public string? EventGroup { get; init; }
+
+    /// <summary>Empty/omitted on create; the server assigns the guid.</summary>
     public string? Id { get; init; }
-    public JsonElement? LastInput { get; init; }
+
+    public string? Name { get; init; }
+    public string? Owner { get; init; }
+
+    /// <summary>Filter conditions. Empty array = fire for every matching message.</summary>
+    public IReadOnlyList<JsonElement> Conditions { get; init; } = Array.Empty<JsonElement>();
+
+    public IReadOnlyList<EventAction> Actions { get; init; } = Array.Empty<EventAction>();
+
+    public bool Repeating { get; init; }
 }

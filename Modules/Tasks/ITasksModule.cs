@@ -14,6 +14,9 @@ public interface ITasksModule
     /// <summary>Retrieves a specific task by owner, source, and task ID.</summary>
     Task<GetTasksResponse> GetTaskAsync(string owner, string sourceId, string taskId = "", bool getAttachedMessage = false, CancellationToken cancellationToken = default);
 
+    /// <summary>Lists all tasks in a source (owner + sourceId). Returns the <c>details</c> array the web client's task grid uses.</summary>
+    Task<GetTasksInSourceResponse> GetTasksInSourceAsync(string owner, string sourceId, CancellationToken cancellationToken = default);
+
     /// <summary>Creates or updates a task (upsert).</summary>
     Task<SaveTasksResponse> SaveTaskAsync(SaveTasksRequest request, CancellationToken cancellationToken = default);
 

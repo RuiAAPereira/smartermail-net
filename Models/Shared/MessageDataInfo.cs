@@ -52,6 +52,12 @@ public record MessageDataInfo
     /// </summary>
     public JsonElement? Type { get; init; }
     public int PartID { get; init; }
+    /// <summary>
+    /// The message's attachments. For drafts this is the only reliable source: the
+    /// <c>attachment-links</c> endpoint returns empty and <see cref="AllAttachmentsLink"/> is
+    /// null/absent, yet this array is still populated (with <c>link:null</c> per entry).
+    /// </summary>
+    public List<MessageAttachmentInfo>? Attachments { get; init; }
     public string? AllAttachmentsLink { get; init; }
     public string? Name { get; init; }
     public string? Email { get; init; }

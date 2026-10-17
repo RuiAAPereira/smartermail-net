@@ -11,8 +11,8 @@ public interface IContactsModule
     /// <summary>Searches for contacts matching the specified criteria.</summary>
     Task<GetAllContactsResponse> GetContactsAsync(GetAllContactsRequest request, CancellationToken cancellationToken = default);
 
-    /// <summary>Retrieves a specific contact by ID, folder, and email address.</summary>
-    Task<GetContactResponse> GetContactAsync(string contactId, string folder, string emailAddress, CancellationToken cancellationToken = default);
+    /// <summary>Retrieves a specific contact via the confirmed /contacts/get/{owner}/{sourceId}/{contactId} endpoint.</summary>
+    Task<GetContactResponse> GetContactAsync(string user, string sourceId, string contactId, CancellationToken cancellationToken = default);
 
     /// <summary>Retrieves a contact group by owner, source, and group ID.</summary>
     Task<GetContactResponse> GetContactGroupAsync(string ownerUsername, string sourceId, string groupId, CancellationToken cancellationToken = default);

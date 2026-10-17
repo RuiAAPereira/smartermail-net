@@ -1,4 +1,4 @@
-#nullable enable
+﻿#nullable enable
 
 using SmarterMail.Net.Http;
 using SmarterMail.Net.Models.Requests;
@@ -20,6 +20,12 @@ public sealed class NotesModule : INotesModule
     /// <inheritdoc/>
     public Task<GetAllNotesResponse> GetNotesAsync(GetAllNotesRequest request, CancellationToken cancellationToken = default)
         => _http.PostAsync<GetAllNotesResponse>("/api/v1/notes/notes-all", request, cancellationToken);
+
+    /// <inheritdoc/>
+    public Task<GetNotesInSourceResponse> GetNotesInSourceAsync(string owner, string sourceId, CancellationToken cancellationToken = default)
+        => _http.GetAsync<GetNotesInSourceResponse>(
+            $"/api/v1/notes/notes/{Uri.EscapeDataString(owner)}/{Uri.EscapeDataString(sourceId)}/",
+            cancellationToken);
 
     /// <inheritdoc/>
     public Task<GetNoteResponse> GetNoteAsync(string noteId, string folderId, string user = "", CancellationToken cancellationToken = default)

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>SmarterMail.Net</id>
+    <version>2.0.0</version>
+    <authors>Rui Pereira</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <description>A cross-platform .NET SDK that provides a strongly typed wrapper around the SmarterMail HTTP API.</description>
+    <releaseNotes>BREAKING: DraftPutAsync now takes PutDraftRequest instead of SendMessageRequest (the send-contract overload is removed) so drafts bind staged attachments. PutDraftRequest gains Importance/Priority/ScheduledSend. Message reads expose attachments[] via MessageDataInfo.Attachments (MessageAttachmentInfo). DownloadAttachmentAsync now downloads draft attachments by part id (requests partIds explicitly).</releaseNotes>
+    <copyright>Copyright © Rui Pereira 2026</copyright>
+    <tags>smartermail email api sdk</tags>
+    <repository type="git" url="https://github.com/RuiAAPereira/smartermail-net" commit="ddbdc1831a0d455b875f7e969f1c66dccbfaff1f" />
+    <dependencies>
+      <group targetFramework="net10.0">
+        <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="10.0.7" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Http" version="10.0.7" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Logging.Abstractions" version="10.0.7" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="10.0.7" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Http" version="10.0.7" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Logging.Abstractions" version="10.0.7" exclude="Build,Analyzers" />
+        <dependency id="System.Text.Json" version="10.0.7" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="D:\Projetos\MyMail\src\SmarterMail.Net\bin\Release\net10.0\SmarterMail.Net.pdb" target="lib\net10.0\SmarterMail.Net.pdb" />
+    <file src="D:\Projetos\MyMail\src\SmarterMail.Net\bin\Release\netstandard2.0\SmarterMail.Net.pdb" target="lib\netstandard2.0\SmarterMail.Net.pdb" />
+  </files>
+</package>

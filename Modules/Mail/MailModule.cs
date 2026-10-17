@@ -130,7 +130,18 @@ public sealed class MailModule : IMailModule
     /// <inheritdoc/>
     public async Task<byte[]> DownloadAttachmentAsync(GenerateAttachmentLinksRequest request, string partId, CancellationToken cancellationToken = default)
     {
-        var response = await GetAttachmentLinksAsync(request, cancellationToken).ConfigureAwait(false);
+        // Drafts return a link only when the part is requested explicitly (they have no
+        // allAttachmentsLink and an unscoped request comes back empty). Ensure the requested
+        // partId is in PartIds so the call works for drafts and regular messages alike.
+        var effective = request;
+        if (double.TryParse(partId, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var pid))
+        {
+            var parts = request.PartIds is { Count: > 0 } ? new List<double>(request.PartIds) : new List<double>();
+            if (!parts.Contains(pid)) parts.Add(pid);
+            effective = request with { PartIds = parts, IncludeAllAttachmentsLink = false };
+        }
+
+        var response = await GetAttachmentLinksAsync(effective, cancellationToken).ConfigureAwait(false);
         if (response.Links is null || !response.Links.TryGetValue(partId, out var info) || string.IsNullOrEmpty(info.Link))
             throw new Exceptions.SmarterMailApiException(404, $"Attachment link not available for partId '{partId}'.");
         return await _http.GetBytesAsync(info.Link!, cancellationToken).ConfigureAwait(false);
@@ -193,7 +204,7 @@ public sealed class MailModule : IMailModule
     /// <inheritdoc/>
     public Task<DraftPutResponse> DraftPutAsync(
         string attachGuid,
-        SendMessageRequest request,
+        PutDraftRequest request,
         CancellationToken cancellationToken = default)
         => _http.PostAsync<DraftPutResponse>(
             $"/api/v1/mail/draft-put/{Uri.EscapeDataString(attachGuid)}",

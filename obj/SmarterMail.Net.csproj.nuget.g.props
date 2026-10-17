@@ -14,18 +14,18 @@
     <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
   </ItemGroup>
   <ImportGroup Condition=" '$(TargetFramework)' == '' AND '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Import Project="$(NuGetPackageRoot)meziantou.analyzer\3.0.91\buildMultiTargeting\Meziantou.Analyzer.props" Condition="Exists('$(NuGetPackageRoot)meziantou.analyzer\3.0.91\buildMultiTargeting\Meziantou.Analyzer.props')" />
+    <Import Project="$(NuGetPackageRoot)meziantou.analyzer\3.0.303\buildMultiTargeting\Meziantou.Analyzer.props" Condition="Exists('$(NuGetPackageRoot)meziantou.analyzer\3.0.303\buildMultiTargeting\Meziantou.Analyzer.props')" />
   </ImportGroup>
   <ImportGroup Condition=" '$(TargetFramework)' == 'net10.0' AND '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Import Project="$(NuGetPackageRoot)meziantou.analyzer\3.0.91\buildTransitive\Meziantou.Analyzer.props" Condition="Exists('$(NuGetPackageRoot)meziantou.analyzer\3.0.91\buildTransitive\Meziantou.Analyzer.props')" />
+    <Import Project="$(NuGetPackageRoot)meziantou.analyzer\3.0.303\buildTransitive\Meziantou.Analyzer.props" Condition="Exists('$(NuGetPackageRoot)meziantou.analyzer\3.0.303\buildTransitive\Meziantou.Analyzer.props')" />
   </ImportGroup>
   <ImportGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' AND '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Import Project="$(NuGetPackageRoot)meziantou.analyzer\3.0.91\buildTransitive\Meziantou.Analyzer.props" Condition="Exists('$(NuGetPackageRoot)meziantou.analyzer\3.0.91\buildTransitive\Meziantou.Analyzer.props')" />
+    <Import Project="$(NuGetPackageRoot)meziantou.analyzer\3.0.303\buildTransitive\Meziantou.Analyzer.props" Condition="Exists('$(NuGetPackageRoot)meziantou.analyzer\3.0.303\buildTransitive\Meziantou.Analyzer.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net10.0' AND '$(ExcludeRestorePackageImports)' != 'true' ">
-    <PkgRoslynator_Analyzers Condition=" '$(PkgRoslynator_Analyzers)' == '' ">C:\Users\ruisa\.nuget\packages\roslynator.analyzers\4.15.0</PkgRoslynator_Analyzers>
+    <PkgRoslynator_Analyzers Condition=" '$(PkgRoslynator_Analyzers)' == '' ">C:\Users\ruisa\.nuget\packages\roslynator.analyzers\5.0.1</PkgRoslynator_Analyzers>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' AND '$(ExcludeRestorePackageImports)' != 'true' ">
-    <PkgRoslynator_Analyzers Condition=" '$(PkgRoslynator_Analyzers)' == '' ">C:\Users\ruisa\.nuget\packages\roslynator.analyzers\4.15.0</PkgRoslynator_Analyzers>
+    <PkgRoslynator_Analyzers Condition=" '$(PkgRoslynator_Analyzers)' == '' ">C:\Users\ruisa\.nuget\packages\roslynator.analyzers\5.0.1</PkgRoslynator_Analyzers>
   </PropertyGroup>
 </Project>

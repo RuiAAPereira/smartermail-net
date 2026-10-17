@@ -10,3 +10,4 @@ D:\Projetos\MyMail\src\SmarterMail.Net\obj\Release\netstandard2.0\SmarterMail.Ne
 D:\Projetos\MyMail\src\SmarterMail.Net\obj\Release\netstandard2.0\SmarterMail.Net.dll
 D:\Projetos\MyMail\src\SmarterMail.Net\obj\Release\netstandard2.0\SmarterMail.Net.xml
 D:\Projetos\MyMail\src\SmarterMail.Net\obj\Release\netstandard2.0\SmarterMail.Net.pdb
+D:\Projetos\MyMail\src\SmarterMail.Net\obj\Release\netstandard2.0\SmarterMail.Net.sourcelink.json

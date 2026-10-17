@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>SmarterMail.Net</id>
+    <version>2.1.6</version>
+    <authors>Rui Pereira</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <description>A cross-platform .NET SDK that provides a strongly typed wrapper around the SmarterMail HTTP API.</description>
+    <releaseNotes>Notes: add GetNotesInSourceAsync for GET /api/v1/notes/notes/{owner}/{sourceId}/ and bind /api/v1/notes/sources sharedLists into NoteSourceInfo. Enables MyPortway notes source resolution and per-source listing.</releaseNotes>
+    <copyright>Copyright © Rui Pereira 2026</copyright>
+    <tags>smartermail email api sdk</tags>
+    <repository type="git" url="https://github.com/RuiAAPereira/smartermail-net" commit="ddbdc1831a0d455b875f7e969f1c66dccbfaff1f" />
+    <dependencies>
+      <group targetFramework="net10.0">
+        <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="10.0.7" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Http" version="10.0.7" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Logging.Abstractions" version="10.0.7" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="10.0.7" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Http" version="10.0.7" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Logging.Abstractions" version="10.0.7" exclude="Build,Analyzers" />
+        <dependency id="System.Text.Json" version="10.0.7" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="D:\Projetos\MyMail\src\SmarterMail.Net\bin\Debug\net10.0\SmarterMail.Net.dll" target="lib\net10.0\SmarterMail.Net.dll" />
+    <file src="D:\Projetos\MyMail\src\SmarterMail.Net\bin\Debug\net10.0\SmarterMail.Net.xml" target="lib\net10.0\SmarterMail.Net.xml" />
+    <file src="D:\Projetos\MyMail\src\SmarterMail.Net\bin\Debug\netstandard2.0\SmarterMail.Net.dll" target="lib\netstandard2.0\SmarterMail.Net.dll" />
+    <file src="D:\Projetos\MyMail\src\SmarterMail.Net\bin\Debug\netstandard2.0\SmarterMail.Net.xml" target="lib\netstandard2.0\SmarterMail.Net.xml" />
+  </files>
+</package>

@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\Projetos\\MyMail\\src\\SmarterMail.Net\\SmarterMail.Net.csproj": {
-      "version": "1.1.5",
+      "version": "2.1.6",
       "restore": {
         "projectUniqueName": "D:\\Projetos\\MyMail\\src\\SmarterMail.Net\\SmarterMail.Net.csproj",
         "projectName": "SmarterMail.Net",
@@ -28,11 +28,9 @@
           "netstandard2.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\program files\\dotnet\\library-packs": {},
-          "D:\\LocalNuGet": {},
+          "c:\\program files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {},
-          "https://nuget.pkg.github.com/RuiAAPereira/index.json": {}
+          "https://git.rapereira.sytes.net/api/packages/RAAPEREIRA/nuget/index.json": {}
         },
         "frameworks": {
           "net10.0": {
@@ -57,7 +55,7 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.300"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net10.0": {
@@ -67,28 +65,28 @@
             "Meziantou.Analyzer": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[3.0.91, )"
+              "version": "[3.0.303, )"
             },
             "Microsoft.Extensions.DependencyInjection.Abstractions": {
               "target": "Package",
-              "version": "[10.0.7, )"
+              "version": "[10.0.13, )"
             },
             "Microsoft.Extensions.Http": {
               "target": "Package",
-              "version": "[10.0.7, )"
+              "version": "[10.0.13, )"
             },
             "Microsoft.Extensions.Logging.Abstractions": {
               "target": "Package",
-              "version": "[10.0.7, )"
+              "version": "[10.0.13, )"
             },
             "Roslynator.Analyzers": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[4.15.0, )"
+              "version": "[5.0.1, )"
             },
             "System.Text.Json": {
               "target": "Package",
-              "version": "[10.0.7, )"
+              "version": "[10.0.13, )"
             }
           },
           "imports": [
@@ -107,7 +105,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\program files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "c:\\program files\\dotnet\\sdk\\10.0.402/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -390,19 +388,19 @@
             "Meziantou.Analyzer": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[3.0.91, )"
+              "version": "[3.0.303, )"
             },
             "Microsoft.Extensions.DependencyInjection.Abstractions": {
               "target": "Package",
-              "version": "[10.0.7, )"
+              "version": "[10.0.13, )"
             },
             "Microsoft.Extensions.Http": {
               "target": "Package",
-              "version": "[10.0.7, )"
+              "version": "[10.0.13, )"
             },
             "Microsoft.Extensions.Logging.Abstractions": {
               "target": "Package",
-              "version": "[10.0.7, )"
+              "version": "[10.0.13, )"
             },
             "NETStandard.Library": {
               "suppressParent": "All",
@@ -413,11 +411,11 @@
             "Roslynator.Analyzers": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[4.15.0, )"
+              "version": "[5.0.1, )"
             },
             "System.Text.Json": {
               "target": "Package",
-              "version": "[10.0.7, )"
+              "version": "[10.0.13, )"
             }
           },
           "imports": [
@@ -431,7 +429,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\program files\\dotnet\\sdk\\10.0.301\\RuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "c:\\program files\\dotnet\\sdk\\10.0.402\\RuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.Win32.Primitives": "(,4.3.0]",
             "System.AppContext": "(,4.3.0]",

@@ -86,7 +86,10 @@
         <member name="P:SmarterMail.Net.Client.SmarterMailClient.FileStorage">
             <summary>Operations for the authenticated user's file storage.</summary>
         </member>
-        <member name="M:SmarterMail.Net.Client.SmarterMailClient.#ctor(SmarterMail.Net.Authentication.SmarterMailAuthenticator,SmarterMail.Net.Modules.Mail.IMailModule,SmarterMail.Net.Modules.Calendar.ICalendarModule,SmarterMail.Net.Modules.Contacts.IContactsModule,SmarterMail.Net.Modules.Notes.INotesModule,SmarterMail.Net.Modules.Tasks.ITasksModule,SmarterMail.Net.Modules.Notifications.INotificationsModule,SmarterMail.Net.Modules.Categories.ICategoriesModule,SmarterMail.Net.Modules.UserSettings.IUserSettingsModule,SmarterMail.Net.Modules.Folders.IFoldersModule,SmarterMail.Net.Modules.FileStorage.IFileStorageModule)">
+        <member name="P:SmarterMail.Net.Client.SmarterMailClient.EventHooks">
+            <summary>Operations for the authenticated user's event hooks (events, actions, webhooks).</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Client.SmarterMailClient.#ctor(SmarterMail.Net.Authentication.SmarterMailAuthenticator,SmarterMail.Net.Modules.Mail.IMailModule,SmarterMail.Net.Modules.Calendar.ICalendarModule,SmarterMail.Net.Modules.Contacts.IContactsModule,SmarterMail.Net.Modules.Notes.INotesModule,SmarterMail.Net.Modules.Tasks.ITasksModule,SmarterMail.Net.Modules.Notifications.INotificationsModule,SmarterMail.Net.Modules.Categories.ICategoriesModule,SmarterMail.Net.Modules.UserSettings.IUserSettingsModule,SmarterMail.Net.Modules.Folders.IFoldersModule,SmarterMail.Net.Modules.FileStorage.IFileStorageModule,SmarterMail.Net.Modules.Events.IEventHooksModule)">
             <summary>Initializes a new instance of <see cref="T:SmarterMail.Net.Client.SmarterMailClient"/>.</summary>
         </member>
         <member name="M:SmarterMail.Net.Client.SmarterMailClient.DisposeAsync">
@@ -193,8 +196,36 @@
             string enum conversion.
             </summary>
         </member>
+        <member name="T:SmarterMail.Net.Http.TolerantInt32Converter">
+            <summary>
+            Reads an <see cref="T:System.Int32"/> tolerantly from JSON. SmarterMail returns some
+            integer fields inconsistently — as a JSON number, as a quoted string, or as
+            an empty string / null when unset (e.g. userData.lastAcceptedPolicyVersion
+            for a never-accepted policy). Without this, deserialization throws
+            JsonException and crashes consumers. Number and string-number parse to their
+            value; empty, whitespace, and null map to 0. Writing always emits a number.
+            </summary>
+        </member>
         <member name="T:SmarterMail.Net.Models.Enums.AvailabilityLevel">
             <summary>An hour's free/busy level returned by the user-availability endpoint.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Requests.AddEventHookRequest">
+            <summary>
+            Request body for POST /api/v1/settings/event-hook (AddEventHook). Models the event-hook
+            envelope verified against the live API, not a single action.
+            </summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.AddEventHookRequest.EventID">
+            <summary>Numeric event id. Received mail = 30000 (LocalMessageDelivered).</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.AddEventHookRequest.EventGroup">
+            <summary>Category resource id, e.g. "@Email".</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.AddEventHookRequest.Id">
+            <summary>Empty/omitted on create; the server assigns the guid.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.AddEventHookRequest.Conditions">
+            <summary>Filter conditions. Empty array = fire for every matching message.</summary>
         </member>
         <member name="T:SmarterMail.Net.Models.Requests.AddressBookRequest">
             <summary>Request body for address-book folder add/edit/delete endpoints.</summary>
@@ -233,6 +264,12 @@
         <member name="P:SmarterMail.Net.Models.Requests.DeleteTaskRequest.Id">
             <summary>Task id.</summary>
         </member>
+        <member name="T:SmarterMail.Net.Models.Requests.GetEventHooksByOwnerRequest">
+            <summary>Request body for POST /api/v1/settings/event-hooks-by-owner (scoped to the authenticated owner).</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.GetEventHooksByOwnerRequest.Name">
+            <summary>Filters by event name; pass the stable hook name for idempotent lookup.</summary>
+        </member>
         <member name="T:SmarterMail.Net.Models.Requests.GetOccurrenceDetailsRequest">
             <summary>Body for the occurrence-details endpoint: identifies one occurrence of a recurring series.</summary>
         </member>
@@ -243,6 +280,22 @@
             <summary>
             The flag action type. Known values: "SetBasic", "SetFollowup", "Complete", "Clear".
             </summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.PutDraftRequest.Importance">
+            <summary>Message importance (serialized as a string, e.g. "normal"). Mirrors the send contract.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.PutDraftRequest.Priority">
+            <summary>
+            Numeric draft priority the official webmail sends (<c>priority:1</c>). Optional; omitted when null.
+            Distinct from <see cref="P:SmarterMail.Net.Models.Requests.PutDraftRequest.Importance"/> — exact value scheme is undocumented, so leave unset unless
+            you have a verified value.
+            </summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Requests.PutDraftRequest.ScheduledSend">
+            <summary>ISO-8601 UTC scheduled-send time, if the draft is queued for later delivery.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Requests.RemoveEventHookRequest">
+            <summary>Request body for POST /api/v1/settings/event-hook-delete. `input` is the list of hook guids.</summary>
         </member>
         <member name="P:SmarterMail.Net.Models.Requests.SaveEventRequest.AttachmentGuid">
             <summary>When set, binds files previously uploaded under this attachment GUID to the saved event.</summary>
@@ -352,14 +405,23 @@
         <member name="P:SmarterMail.Net.Models.Responses.GetEmailsSignaturesResponse.Message">
             <summary>If success is false, why the call failed.</summary>
         </member>
+        <member name="T:SmarterMail.Net.Models.Responses.GetEventHookByGuidResponse">
+            <summary>Response from GET /api/v1/settings/event-hook/{guid}. `eventHook` is null when absent.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.GetEventHooksByOwnerResponse">
+            <summary>
+            Response from POST /api/v1/settings/event-hooks-by-owner. Items are kept as raw JSON
+            (the populated list shape is not yet modeled); callers typically branch on <see cref="P:SmarterMail.Net.Models.Responses.GetEventHooksByOwnerResponse.Total"/>.
+            </summary>
+        </member>
         <member name="T:SmarterMail.Net.Models.Responses.GetEventsBetweenDatesResponse">
             <summary>Response for <c>POST /api/v1/calendars/events/{owner}/{id}</c> (events between dates).</summary>
         </member>
-        <member name="T:SmarterMail.Net.Models.Responses.GetNoteSourcesResponse">
-            <summary>Response for <c>GET /api/v1/notes/sources</c>.</summary>
+        <member name="T:SmarterMail.Net.Models.Responses.GetNotesInSourceResponse">
+            <summary>Response for <c>GET /api/v1/notes/notes/{owner}/{sourceId}/</c>.</summary>
         </member>
-        <member name="P:SmarterMail.Net.Models.Responses.GetNoteSourcesResponse.Sources">
-            <summary>The user's note sources (note folders). Reuses the shared source descriptor shape.</summary>
+        <member name="T:SmarterMail.Net.Models.Responses.GetNoteSourcesResponse">
+            <summary>Response for <c>GET /api/v1/notes/sources</c>. The live body wraps sources in "sharedLists".</summary>
         </member>
         <member name="T:SmarterMail.Net.Models.Responses.SpamAction">
             <summary>A spam action rule applied at a given weight threshold.</summary>
@@ -426,6 +488,14 @@
         </member>
         <member name="T:SmarterMail.Net.Models.Responses.GetUserAvailabilityResponse">
             <summary>SDK-side wrapper over the bare array the user-availability endpoint returns.</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Responses.GetUserEventsResponse">
+            <summary>Response from POST /api/v1/settings/user-events. Templates keyed by event id (e.g. "30000").</summary>
+            <remarks>
+            Read-only: this response is deserialized but never re-serialized/round-tripped. Only the inner
+            <see cref="T:SmarterMail.Net.Models.Shared.EventAction"/> template is cloned and re-posted (it carries its own <c>Extra</c>), so the
+            absence of a top-level extension-data bag here is intentional.
+            </remarks>
         </member>
         <member name="T:SmarterMail.Net.Models.Responses.ParseContactsImportResponse">
             <summary>
@@ -539,6 +609,28 @@
         <member name="T:SmarterMail.Net.Models.Shared.CategoryInfo">
             <summary>A category assignment on a contact.</summary>
         </member>
+        <member name="T:SmarterMail.Net.Models.Shared.EventAction">
+            <summary>
+            An event action attached to an event hook. For push we use the "WebhookAction".
+            Unknown server-managed fields are preserved via <see cref="P:SmarterMail.Net.Models.Shared.EventAction.Extra"/> so a template
+            fetched from user-events can be re-posted to AddEventHook without loss.
+            </summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.EventAction.Key">
+            <summary>Action type as a string enum, e.g. "WebhookAction" (sending the int 8 yields INVALID_PAYLOAD).</summary>
+        </member>
+        <member name="T:SmarterMail.Net.Models.Shared.EventActionInput">
+            <summary>A single input parameter of an event action (e.g. the webhook URL).</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.EventActionInput.Key">
+            <summary>Input key, e.g. "webhookurl", "webhookmethod", "webhookheaders", "webhookpayload".</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.EventActionInput.Value">
+            <summary>Input value.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.EventActionInput.Extra">
+            <summary>Server-managed fields (inputType, required, hidden, ...) preserved on round-trip.</summary>
+        </member>
         <member name="T:SmarterMail.Net.Models.Shared.EventAttachedFile">
             <summary>A file attached to a calendar event (request side; response-only fields omitted).</summary>
         </member>
@@ -559,6 +651,18 @@
             <summary>The SmarterMail timezone-aware date/time shape used by calendar events
             (both read-side <c>startWithTZ</c>/<c>endWithTZ</c> and write-side <c>start</c>/<c>end</c>).</summary>
         </member>
+        <member name="T:SmarterMail.Net.Models.Shared.EventTemplate">
+            <summary>An available event template, including the actions a hook may attach.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.EventTemplate.EventId">
+            <summary>Numeric event id. Note: the server returns this as "eventId" (camelCase) here.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.EventTemplate.Id">
+            <summary>Event identifier, e.g. "LocalMessageDelivered".</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.EventTemplate.CategoryResourceId">
+            <summary>Category resource id, e.g. "@Email".</summary>
+        </member>
         <member name="T:SmarterMail.Net.Models.Shared.InlineLinkInfo">
             <summary>Represents a time-limited link for a single inline (embedded) attachment.</summary>
         </member>
@@ -571,12 +675,41 @@
         <member name="T:SmarterMail.Net.Models.Shared.MailFolderNode">
             <summary>Represents a normalized email folder node with nested children.</summary>
         </member>
+        <member name="T:SmarterMail.Net.Models.Shared.MessageAttachmentInfo">
+            <summary>
+            One entry of the message-read <c>attachments[]</c> array. For drafts the server returns
+            <see cref="P:SmarterMail.Net.Models.Shared.MessageAttachmentInfo.Link"/> as <c>null</c> (no signed download link; generated on demand by
+            <see cref="P:SmarterMail.Net.Models.Shared.MessageAttachmentInfo.PartID"/>), so callers must not require a non-empty link to surface the file.
+            </summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.MessageAttachmentInfo.Link">
+            <summary>Signed download link; <c>null</c> for drafts.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.MessageAttachmentInfo.Filename">
+            <summary>Original file name (e.g. "cg.png").</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.MessageAttachmentInfo.Type">
+            <summary>MIME type as a string (e.g. "image").</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.MessageAttachmentInfo.PartID">
+            <summary>MIME part id used to fetch the attachment.</summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.MessageAttachmentInfo.Size">
+            <summary>Size in bytes.</summary>
+        </member>
         <member name="P:SmarterMail.Net.Models.Shared.MessageDataInfo.Type">
             <summary>
             For email attachments: the MIME type as a string (e.g. "image/jpeg").
             For calendar/recurrence messages: the recurrence type as a number
             (0=None, 1=Yearly, 2=Monthly, 3=Weekly, 4=Daily, 5=Hourly, 6=Minutely, 7=Secondly).
             Use <see cref="P:System.Text.Json.JsonElement.ValueKind"/> to distinguish.
+            </summary>
+        </member>
+        <member name="P:SmarterMail.Net.Models.Shared.MessageDataInfo.Attachments">
+            <summary>
+            The message's attachments. For drafts this is the only reliable source: the
+            <c>attachment-links</c> endpoint returns empty and <see cref="P:SmarterMail.Net.Models.Shared.MessageDataInfo.AllAttachmentsLink"/> is
+            null/absent, yet this array is still populated (with <c>link:null</c> per entry).
             </summary>
         </member>
         <member name="P:SmarterMail.Net.Models.Shared.MessageDataInfo.Calendar">
@@ -881,7 +1014,7 @@
             <summary>Searches for contacts matching the specified criteria.</summary>
         </member>
         <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.GetContactAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
-            <summary>Retrieves a specific contact by ID, folder, and email address.</summary>
+            <summary>Retrieves a specific contact via the confirmed /contacts/get/{owner}/{sourceId}/{contactId} endpoint.</summary>
         </member>
         <member name="M:SmarterMail.Net.Modules.Contacts.IContactsModule.GetContactGroupAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary>Retrieves a contact group by owner, source, and group ID.</summary>
@@ -939,6 +1072,45 @@
             Parses a CSV or VCF file and returns the contacts it contains, without committing them.
             Calls POST /api/upload with context=contact-import.
             </summary>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Events.EventHooksModule">
+            <summary>Implements event-hook operations via the SmarterMail HTTP API.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Events.EventHooksModule.#ctor(SmarterMail.Net.Http.ISmarterMailHttpClient)">
+            <summary>Initializes a new instance of <see cref="T:SmarterMail.Net.Modules.Events.EventHooksModule"/>.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Events.EventHooksModule.GetUserEventsAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Events.EventHooksModule.GetEventHooksByOwnerAsync(SmarterMail.Net.Models.Requests.GetEventHooksByOwnerRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Events.EventHooksModule.AddEventHookAsync(SmarterMail.Net.Models.Requests.AddEventHookRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Events.EventHooksModule.GetEventHookByGuidAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Events.EventHooksModule.RemoveEventHookAsync(SmarterMail.Net.Models.Requests.RemoveEventHookRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SmarterMail.Net.Modules.Events.IEventHooksModule">
+            <summary>Operations for the authenticated user's event hooks (events → actions, incl. webhooks).</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Events.IEventHooksModule.GetUserEventsAsync(System.Threading.CancellationToken)">
+            <summary>Lists the available event templates (incl. possibleActions to clone). POST /api/v1/settings/user-events.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Events.IEventHooksModule.GetEventHooksByOwnerAsync(SmarterMail.Net.Models.Requests.GetEventHooksByOwnerRequest,System.Threading.CancellationToken)">
+            <summary>Lists the authenticated owner's event hooks, filtered by name. POST /api/v1/settings/event-hooks-by-owner.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Events.IEventHooksModule.AddEventHookAsync(SmarterMail.Net.Models.Requests.AddEventHookRequest,System.Threading.CancellationToken)">
+            <summary>Creates an event hook (or updates an existing one when IsNew is false and Id is set). POST /api/v1/settings/event-hook.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Events.IEventHooksModule.GetEventHookByGuidAsync(System.String,System.Threading.CancellationToken)">
+            <summary>Reads a single event hook by guid. GET /api/v1/settings/event-hook/{guid}.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Events.IEventHooksModule.RemoveEventHookAsync(SmarterMail.Net.Models.Requests.RemoveEventHookRequest,System.Threading.CancellationToken)">
+            <summary>Deletes one or more event hooks by guid. POST /api/v1/settings/event-hook-delete.</summary>
         </member>
         <member name="T:SmarterMail.Net.Modules.FileStorage.FileStorageModule">
             <summary>Implements file storage operations via the SmarterMail HTTP API.</summary>
@@ -1123,11 +1295,14 @@
         <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.AddAttachmentAsync(System.String,System.String,System.IO.Stream,System.String,System.Threading.CancellationToken)">
             <summary>Uploads an attachment for a draft or outgoing message.</summary>
         </member>
-        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.DraftPutAsync(System.String,SmarterMail.Net.Models.Requests.SendMessageRequest,System.Threading.CancellationToken)">
+        <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.DraftPutAsync(System.String,SmarterMail.Net.Models.Requests.PutDraftRequest,System.Threading.CancellationToken)">
             <summary>
             Saves a draft via the draft-put endpoint and binds any staged attachments to it.
-            Returns the <c>uid</c> of the saved draft. Typically called before
-            <see cref="M:SmarterMail.Net.Modules.Mail.IMailModule.SendMessageAsync(SmarterMail.Net.Models.Requests.SendMessageRequest,System.Threading.CancellationToken)"/> when the message has attachments.
+            Takes the draft-specific <see cref="T:SmarterMail.Net.Models.Requests.PutDraftRequest"/> contract: it carries the
+            reconciliation fields (<c>excludeFiles</c>/<c>draftExcludeFiles</c>/<c>originalCidString</c>/…)
+            the server needs to commit staged uploads to the draft. Sending the send contract
+            (<see cref="T:SmarterMail.Net.Models.Requests.SendMessageRequest"/>) instead silently drops attachments from the saved draft.
+            Returns the <c>uid</c> of the saved draft.
             </summary>
         </member>
         <member name="M:SmarterMail.Net.Modules.Mail.IMailModule.GetFolderStatsAsync(System.String,SmarterMail.Net.Models.Requests.GetFolderInfoRequest,System.Threading.CancellationToken)">
@@ -1199,7 +1374,7 @@
         <member name="M:SmarterMail.Net.Modules.Mail.MailModule.AddAttachmentAsync(System.String,System.String,System.IO.Stream,System.String,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.DraftPutAsync(System.String,SmarterMail.Net.Models.Requests.SendMessageRequest,System.Threading.CancellationToken)">
+        <member name="M:SmarterMail.Net.Modules.Mail.MailModule.DraftPutAsync(System.String,SmarterMail.Net.Models.Requests.PutDraftRequest,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="M:SmarterMail.Net.Modules.Mail.MailModule.GetFolderStatsAsync(System.String,SmarterMail.Net.Models.Requests.GetFolderInfoRequest,System.Threading.CancellationToken)">
@@ -1216,6 +1391,9 @@
         </member>
         <member name="M:SmarterMail.Net.Modules.Notes.INotesModule.GetNotesAsync(SmarterMail.Net.Models.Requests.GetAllNotesRequest,System.Threading.CancellationToken)">
             <summary>Searches for notes matching the specified criteria.</summary>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notes.INotesModule.GetNotesInSourceAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>Lists all notes in a single source via the web client's per-source route.</summary>
         </member>
         <member name="M:SmarterMail.Net.Modules.Notes.INotesModule.GetNoteAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary>Retrieves a specific note by ID, folder, and owner.</summary>
@@ -1239,6 +1417,9 @@
             <summary>Initializes a new instance of <see cref="T:SmarterMail.Net.Modules.Notes.NotesModule"/>.</summary>
         </member>
         <member name="M:SmarterMail.Net.Modules.Notes.NotesModule.GetNotesAsync(SmarterMail.Net.Models.Requests.GetAllNotesRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Notes.NotesModule.GetNotesInSourceAsync(System.String,System.String,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="M:SmarterMail.Net.Modules.Notes.NotesModule.GetNoteAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
@@ -1298,6 +1479,9 @@
         <member name="M:SmarterMail.Net.Modules.Tasks.ITasksModule.GetTaskAsync(System.String,System.String,System.String,System.Boolean,System.Threading.CancellationToken)">
             <summary>Retrieves a specific task by owner, source, and task ID.</summary>
         </member>
+        <member name="M:SmarterMail.Net.Modules.Tasks.ITasksModule.GetTasksInSourceAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>Lists all tasks in a source (owner + sourceId). Returns the <c>details</c> array the web client's task grid uses.</summary>
+        </member>
         <member name="M:SmarterMail.Net.Modules.Tasks.ITasksModule.SaveTaskAsync(SmarterMail.Net.Models.Requests.SaveTasksRequest,System.Threading.CancellationToken)">
             <summary>Creates or updates a task (upsert).</summary>
         </member>
@@ -1317,6 +1501,9 @@
             <inheritdoc/>
         </member>
         <member name="M:SmarterMail.Net.Modules.Tasks.TasksModule.GetTaskAsync(System.String,System.String,System.String,System.Boolean,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SmarterMail.Net.Modules.Tasks.TasksModule.GetTasksInSourceAsync(System.String,System.String,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="M:SmarterMail.Net.Modules.Tasks.TasksModule.SaveTaskAsync(SmarterMail.Net.Models.Requests.SaveTasksRequest,System.Threading.CancellationToken)">

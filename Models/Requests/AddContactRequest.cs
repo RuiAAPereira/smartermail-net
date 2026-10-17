@@ -54,6 +54,10 @@ public record AddContactRequest
     public string? SourceName { get; init; }
     public JsonElement? FlagInfo { get; init; }
     public string? EmailAddress { get; init; }
+    // SmarterMail persists a contact's email(s) and phone(s) from these list fields on
+    // contact-put; the scalar EmailAddress/Number are not read back. Send the lists.
+    public List<string>? EmailAddressList { get; init; }
+    public List<string>? PhoneNumberList { get; init; }
     public JsonElement? Categories { get; init; }
     public string? ContactType { get; init; }
     public bool IsMailingList { get; init; }
