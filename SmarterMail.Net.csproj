@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <PackageId>SmarterMail.Net</PackageId>
-    <Version>2.1.6</Version>
+    <Version>2.1.7</Version>
     <PackageReleaseNotes>Notes: add GetNotesInSourceAsync for GET /api/v1/notes/notes/{owner}/{sourceId}/ and bind /api/v1/notes/sources sharedLists into NoteSourceInfo. Enables MyPortway notes source resolution and per-source listing.</PackageReleaseNotes>
     <Authors>Rui Pereira</Authors>
     <Description>A cross-platform .NET SDK that provides a strongly typed wrapper around the SmarterMail HTTP API.</Description>

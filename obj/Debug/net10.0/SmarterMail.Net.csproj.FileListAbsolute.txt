@@ -13,4 +13,3 @@ D:\Projetos\MyMail\src\SmarterMail.Net\obj\Debug\net10.0\refint\SmarterMail.Net.
 D:\Projetos\MyMail\src\SmarterMail.Net\obj\Debug\net10.0\SmarterMail.Net.xml
 D:\Projetos\MyMail\src\SmarterMail.Net\obj\Debug\net10.0\SmarterMail.Net.pdb
 D:\Projetos\MyMail\src\SmarterMail.Net\obj\Debug\net10.0\ref\SmarterMail.Net.dll
-D:\Projetos\MyMail\src\SmarterMail.Net\obj\Debug\net10.0\SmarterM.C99E68C5.Up2Date
